@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="62%">
+      <stop offset="0" stop-color="#5a1873"/>
+      <stop offset="1" stop-color="#1e0628"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#ff4fd1" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#ff4fd1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Moldura: anel lilás + filete rosa, como na logo -->
+  <circle cx="256" cy="256" r="252" fill="#9f4dbb"/>
+  <circle cx="256" cy="256" r="234" fill="#f2caf3"/>
+  <circle cx="256" cy="256" r="224" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="170" fill="url(#glow)"/>
+
+  <!-- Diamante -->
+  <polygon points="256,62 382,256 256,450 130,256" fill="#c77ce0"/>
+  <polygon points="256,62 382,256 256,256" fill="#9b3fc0"/>
+  <polygon points="130,256 256,256 256,450" fill="#7a2a9e"/>
+  <polygon points="256,256 382,256 256,450" fill="#5c1a7e"/>
+  <polygon points="256,62 130,256 256,256" fill="#d48ee6"/>
+  <polygon points="256,62 382,256 256,450 130,256" fill="none" stroke="#f2caf3" stroke-width="12" stroke-linejoin="round"/>
+
+  <!-- Coroa -->
+  <path d="M212 214 L202 166 L234 190 L256 150 L278 190 L310 166 L300 214 Z" fill="#fff4fd" stroke="#3a0b4a" stroke-width="7" stroke-linejoin="round"/>
+  <circle cx="202" cy="160" r="9" fill="#f2caf3" stroke="#3a0b4a" stroke-width="5"/>
+  <circle cx="256" cy="143" r="9" fill="#f2caf3" stroke="#3a0b4a" stroke-width="5"/>
+  <circle cx="310" cy="160" r="9" fill="#f2caf3" stroke="#3a0b4a" stroke-width="5"/>
+
+  <!-- Coração -->
+  <path d="M256 352 C236 336 222 324 222 308 a17 17 0 0 1 34 -4 a17 17 0 0 1 34 4 c0 16 -14 28 -34 44z" fill="#f2caf3"/>
+
+  <!-- Brilhos -->
+  <path d="M392 120 C394 136 402 144 418 146 C402 148 394 156 392 172 C390 156 382 148 366 146 C382 144 390 136 392 120Z" fill="#f2caf3"/>
+  <path d="M122 330 C123 341 129 347 140 348 C129 349 123 355 122 366 C121 355 115 349 104 348 C115 347 121 341 122 330Z" fill="#f2caf3"/>
+</svg>

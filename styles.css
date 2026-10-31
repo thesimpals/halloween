@@ -87,7 +87,7 @@ button { font: inherit; color: inherit; cursor: pointer; background: none; borde
   color: var(--blush);
   text-decoration: none;
 }
-.wordmark-gem { width: 16px; height: 24px; filter: drop-shadow(0 0 6px var(--magenta)); }
+.wordmark-icon { width: 34px; height: 34px; display: block; filter: drop-shadow(0 0 10px rgba(255, 79, 209, .5)); }
 .topbar-date {
   font-family: var(--font-mystic);
   font-size: .8rem;
