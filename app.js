@@ -286,8 +286,53 @@
       toast("Revele pelo menos uma carta primeiro");
       return;
     }
-    shareAny(shareText());
+    const deck = DECKS[state.mode];
+    const lines = deck.cards.map((c, i) => [c.cat, state.values[i]]).filter((_, i) => state.revealed.has(i))
+      .map(([cat, v]) => [cat, Array.isArray(v) ? v.join(", ") : v]);
+    const msg = state.mode === "casa"
+      ? "Essa é a minha casa assombrada do Tarot da Migas Sims. E a sua? 👀"
+      : "Esse é o meu Sim assombrado do Tarot da Migas Sims. E o seu? 👀";
+    openShare(shareText(), { headline: deck.title, kicker: "Tarot Assombrado · Migas Sims", lines }, msg);
   }
+
+  // ---------- Compartilhar como imagem ----------
+  const shareBox = $("#sharebox");
+  let shareFile = null, shareMsg = "", shareTextFull = "";
+  async function openShare(text, spec, msg) {
+    shareTextFull = text;
+    shareMsg = `${msg}\n${SITE_URL}`;
+    shareFile = null;
+    $("#share-img").removeAttribute("src");
+    $("#share-status").textContent = "Montando a sua imagem…";
+    $("#share-send").disabled = true;
+    shareBox.hidden = false;
+    try {
+      const blob = await window.makeShareImage(spec);
+      shareFile = new File([blob], "migas-sims-halloween.png", { type: "image/png" });
+      $("#share-img").src = URL.createObjectURL(blob);
+      $("#share-status").textContent = "";
+      $("#share-send").disabled = false;
+    } catch (_) {
+      shareBox.hidden = true;
+      shareAny(text);
+    }
+  }
+  async function sendShare() {
+    if (!shareFile) return;
+    if (navigator.canShare && navigator.canShare({ files: [shareFile] })) {
+      try { await navigator.share({ files: [shareFile], text: shareMsg }); } catch (_) { /* cancelado */ }
+      return;
+    }
+    const a = document.createElement("a");
+    a.href = $("#share-img").src;
+    a.download = shareFile.name;
+    a.click();
+    try { await navigator.clipboard.writeText(shareMsg); } catch (_) {}
+    toast("Imagem baixada e texto copiado! É só mandar no grupo.");
+  }
+  $("#share-send").addEventListener("click", sendShare);
+  $("#share-text").addEventListener("click", () => shareAny(shareTextFull));
+  shareBox.addEventListener("click", (e) => { if (e.target === shareBox || e.target.closest(".share-close")) shareBox.hidden = true; });
 
   async function shareAny(text) {
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
@@ -370,7 +415,10 @@
   });
   $("#game-share").addEventListener("click", () => {
     if (!gameShare) { toast("Faça a sua jogada primeiro"); return; }
-    shareAny(`${gameShare}\n\nJogue também: ${SITE_URL}`);
+    const g = GAMES[gameMode];
+    openShare(`${gameShare}\n\nJogue também: ${SITE_URL}`,
+      { headline: g.title, kicker: "Migas Sims · Halloween", lines: window.linesFromText(gameShare) },
+      `Esse é o meu resultado no ${g.title} da Migas Sims. E o seu? 👀`);
   });
 
   // ---------- Inclinação + brilho holográfico (mouse) ----------

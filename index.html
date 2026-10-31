@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Shantell+Sans:ital,wght,BNCE,INFM@0,400..800,-100..100,0..100&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20">
+  <link rel="stylesheet" href="styles.css?v=21">
 </head>
 <body data-screen="intro">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -151,10 +151,21 @@
     <div class="zoom-card" id="zoom-card"></div>
   </div>
 
+  <div class="sharebox" id="sharebox" hidden>
+    <div class="share-panel" role="dialog" aria-label="Compartilhar">
+      <button class="share-close zoom-close" type="button" aria-label="Fechar">×</button>
+      <p class="share-status" id="share-status"></p>
+      <img class="share-img" id="share-img" alt="Imagem do seu resultado">
+      <button class="btn btn-primary share-send" type="button" id="share-send">Enviar imagem</button>
+      <button class="link-btn" type="button" id="share-text">Mandar só o texto</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="data.js?v=9"></script>
+  <script src="share-image.js?v=1"></script>
   <script src="games.js?v=8"></script>
-  <script src="app.js?v=13"></script>
+  <script src="app.js?v=14"></script>
 </body>
 </html>
