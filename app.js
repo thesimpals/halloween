@@ -21,30 +21,25 @@
     }
     return a;
   };
-
   function drawValue(card, previous) {
     if (card.pick) return shuffle(card.options).slice(0, card.pick);
     const pool = card.options.filter((o) => o !== previous);
     return pool[rand(pool.length)];
   }
 
-  // ---------- Desenho das cartas ----------
-  const EMBLEM = `
-    <svg class="back-emblem" viewBox="0 0 100 130" aria-hidden="true">
-      <polygon points="50,4 94,65 50,126 6,65" fill="#e05cc8"/>
-      <polygon points="50,4 94,65 50,65" fill="#b03cc0"/>
-      <polygon points="6,65 50,65 50,126" fill="#5a1475" opacity=".6"/>
-      <polygon points="50,4 6,65 50,65" fill="#fff" opacity=".28"/>
-      <polygon points="50,4 94,65 50,126 6,65" fill="none" stroke="#ffe0f6" stroke-width="3.5" stroke-linejoin="round"/>
-      <g fill="rgba(255,224,246,.3)" stroke="#ffe0f6" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
-        <path d="M37 52 L34 37 L43 45 L50 33 L57 45 L66 37 L63 52 Z"/>
-      </g>
-      <path d="M50 96 C44 91 41 88 41 85 a4.5 4.5 0 0 1 9 -1 a4.5 4.5 0 0 1 9 1 c0 3 -3 6 -9 11z" fill="#ffe0f6"/>
-      <path d="M86 18 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffe0f6"/>
-      <path d="M14 104 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6z" fill="#ffe0f6"/>
-    </svg>`;
-
+  // ---------- Cartas ----------
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  const MINI_RING = `
+    <svg class="mini-ring" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width=".8"/>
+      <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray=".6 4.4"/>
+    </svg>`;
+  const REROLL_ICON = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>
+    </svg>`;
+  const ORNAMENT = `<span class="ornament" aria-hidden="true"><svg viewBox="0 0 40 60"><polygon points="20,2 38,30 20,58 2,30" fill="currentColor"/></svg></span>`;
 
   function ideaHTML(value) {
     if (Array.isArray(value)) {
@@ -54,22 +49,23 @@
   }
 
   function cardHTML(card, value, i) {
-    const r = (Math.random() * 30 - 15).toFixed(1);
+    const r = (Math.random() * 24 - 12).toFixed(1);
     return `
       <div class="card is-dealing" role="button" tabindex="0" data-i="${i}" style="--i:${i};--r:${r}"
            aria-label="Revelar carta ${esc(card.cat)}">
         <div class="card-inner">
           <div class="card-face card-back">
             <span class="back-num">${esc(card.numeral)}</span>
-            ${EMBLEM}
+            <span class="back-art">${MINI_RING}<svg class="mini-gem" viewBox="0 0 200 300" aria-hidden="true"><use href="#gem"/></svg></span>
             <span class="back-cat">${esc(card.cat)}</span>
           </div>
           <div class="card-face card-front">
-            <span class="arcana">${esc(card.numeral)} · ${esc(card.arcana)}</span>
-            <span class="front-icon" aria-hidden="true">${card.icon}</span>
+            <span class="front-num">${esc(card.numeral)}</span>
+            <span class="front-arcana">${esc(card.arcana)}</span>
+            ${ORNAMENT}
             <span class="front-cat">${esc(card.cat)}</span>
             <p class="idea">${ideaHTML(value)}</p>
-            <button class="reroll" type="button" data-reroll="${i}" aria-label="Trocar ${esc(card.cat)}" title="Não curtiu? Troca!">🔄</button>
+            <button class="reroll" type="button" data-reroll="${i}" aria-label="Trocar ${esc(card.cat)}" title="Trocar esta carta">${REROLL_ICON}</button>
           </div>
         </div>
       </div>`;
@@ -78,14 +74,9 @@
   // ---------- Telas ----------
   function startReading(mode) {
     const deck = DECKS[mode];
-    state = {
-      mode,
-      values: deck.cards.map((c) => drawValue(c)),
-      revealed: new Set(),
-    };
-    $("#reading-kicker").textContent = `${deck.icon} Sua tiragem de ${deck.short}`;
+    state = { mode, values: deck.cards.map((c) => drawValue(c)), revealed: new Set() };
     $("#reading-title").textContent = deck.title;
-    $("#progress").setAttribute("aria-valuemax", deck.cards.length);
+    $("#total").textContent = deck.cards.length;
     grid.innerHTML = deck.cards.map((c, i) => cardHTML(c, state.values[i], i)).join("");
     $("#done").hidden = true;
     btnReveal.hidden = false;
@@ -117,19 +108,17 @@
   function updateProgress() {
     const total = DECKS[state.mode].cards.length;
     const n = state.revealed.size;
-    $("#progress-fill").style.width = `${(n / total) * 100}%`;
-    $("#progress").setAttribute("aria-valuenow", n);
-    $("#progress-label").textContent =
-      n === total ? "Todas as cartas reveladas!" : `${n} de ${total} cartas reveladas`;
+    $("#count").textContent = n;
+    $("#rule-fill").style.width = `${(n / total) * 100}%`;
   }
 
   // ---------- Interações ----------
   function sparkle(el) {
-    const icons = ["✨", "💖", "🦇", "💜"];
     for (let k = 0; k < 6; k++) {
-      const s = document.createElement("span");
-      s.className = "spark";
-      s.textContent = icons[rand(icons.length)];
+      const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      s.setAttribute("viewBox", "0 0 40 40");
+      s.setAttribute("class", "spark");
+      s.innerHTML = '<use href="#sparkle"/>';
       const angle = (Math.PI * 2 * k) / 6 + Math.random() * 0.5;
       s.style.setProperty("--x", `${Math.cos(angle) * 70}px`);
       s.style.setProperty("--y", `${Math.sin(angle) * 70}px`);
@@ -142,13 +131,11 @@
     if (!state || state.revealed.has(i)) return;
     const el = grid.querySelector(`.card[data-i="${i}"]`);
     state.revealed.add(i);
+    el.classList.remove("is-dealing");
     el.classList.add("is-flipped");
     el.setAttribute("aria-label", `${DECKS[state.mode].cards[i].cat}: revelada`);
-    setTimeout(() => {
-      el.classList.add("pop");
-      sparkle(el);
-    }, 280);
-    setTimeout(() => el.classList.remove("pop"), 800);
+    setTimeout(() => { el.classList.add("pop"); sparkle(el); }, 300);
+    setTimeout(() => el.classList.remove("pop"), 820);
     if (navigator.vibrate) navigator.vibrate(12);
     updateProgress();
     if (state.revealed.size === DECKS[state.mode].cards.length) finish();
@@ -163,7 +150,7 @@
 
   function revealAll() {
     const pending = DECKS[state.mode].cards.map((_, i) => i).filter((i) => !state.revealed.has(i));
-    pending.forEach((i, k) => setTimeout(() => flip(i), k * 140));
+    pending.forEach((i, k) => setTimeout(() => flip(i), k * 130));
   }
 
   function reroll(i) {
@@ -179,16 +166,24 @@
     if (navigator.vibrate) navigator.vibrate(8);
   }
 
+  const CONFETTI_SHAPES = [
+    (c) => `<svg viewBox="0 0 40 40"><path fill="${c}" d="M20 0 C21 12 28 19 40 20 C28 21 21 28 20 40 C19 28 12 21 0 20 C12 19 19 12 20 0Z"/></svg>`,
+    (c) => `<svg viewBox="0 0 24 22"><path fill="${c}" d="M12 21 C5 15 1 11 1 7 a5.5 5.5 0 0 1 11 -1 a5.5 5.5 0 0 1 11 1 c0 4 -4 8 -11 14z"/></svg>`,
+    (c) => `<svg viewBox="0 0 40 60"><polygon fill="${c}" points="20,2 38,30 20,58 2,30"/></svg>`,
+  ];
+  const CONFETTI_COLORS = ["#ff4fd1", "#ffd3f2", "#ff8fdc", "#ff8a2a", "#fff3fb"];
+
   function confetti() {
-    const items = ["🎃", "👻", "🦇", "💖", "✨", "🕯️", "💜", "🔮"];
-    for (let k = 0; k < 36; k++) {
+    for (let k = 0; k < 40; k++) {
       const c = document.createElement("span");
       c.className = "confetti";
-      c.textContent = items[rand(items.length)];
+      c.innerHTML = CONFETTI_SHAPES[rand(CONFETTI_SHAPES.length)](CONFETTI_COLORS[rand(CONFETTI_COLORS.length)]);
+      const size = 10 + rand(16);
+      c.style.width = `${size}px`;
+      c.style.height = `${size}px`;
       c.style.left = `${Math.random() * 100}vw`;
-      c.style.fontSize = `${18 + rand(20)}px`;
       c.style.setProperty("--t", `${2.6 + Math.random() * 2}s`);
-      c.style.setProperty("--drift", `${Math.random() * 120 - 60}px`);
+      c.style.setProperty("--drift", `${Math.random() * 140 - 70}px`);
       c.style.setProperty("--rot", `${Math.random() * 720 - 360}deg`);
       c.style.animationDelay = `${Math.random() * 0.6}s`;
       document.body.appendChild(c);
@@ -196,6 +191,7 @@
     }
   }
 
+  // ---------- Compartilhar ----------
   function shareText() {
     const deck = DECKS[state.mode];
     const lines = deck.cards.map((c, i) => {
@@ -218,7 +214,7 @@
   async function share() {
     if (!state) return;
     if (state.revealed.size === 0) {
-      toast("Revele pelo menos uma carta primeiro 👀");
+      toast("Revele pelo menos uma carta primeiro");
       return;
     }
     const text = shareText();
@@ -233,14 +229,14 @@
     }
     try {
       await navigator.clipboard.writeText(text);
-      toast("Copiado! Agora é só colar no grupo 💚");
+      toast("Copiado! Agora é só colar no grupo.");
     } catch (_) {
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, "_blank");
     }
   }
 
   // ---------- Eventos ----------
-  document.querySelectorAll(".choice").forEach((b) =>
+  document.querySelectorAll(".pick-card").forEach((b) =>
     b.addEventListener("click", () => {
       history.pushState(null, "", `#${b.dataset.mode}`);
       route();
@@ -281,53 +277,6 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
   btnShare.addEventListener("click", share);
-
-  // ---------- Céu ----------
-  const starsBox = $("#stars");
-  const SKY_COLORS = ["#ffffff", "#ffd9f3", "#ff9ee0"];
-  for (let k = 0; k < 40; k++) {
-    const s = document.createElement("span");
-    const kind = k % 5 === 0 ? "heart" : k % 4 === 0 ? "dot" : "star";
-    s.className = kind === "star" ? "star" : `star is-${kind}`;
-    if (kind === "heart") s.textContent = "♡";
-    s.style.left = `${Math.random() * 100}%`;
-    s.style.top = `${Math.random() * 100}%`;
-    s.style.setProperty("--c", SKY_COLORS[rand(SKY_COLORS.length)]);
-    s.style.setProperty("--s", `${kind === "dot" ? 3 + rand(3) : kind === "heart" ? 14 + rand(12) : 8 + rand(14)}px`);
-    s.style.setProperty("--d", `${2 + Math.random() * 3}s`);
-    s.style.setProperty("--delay", `${-Math.random() * 4}s`);
-    starsBox.appendChild(s);
-  }
-
-  // Varal: abóboras e fantasminhas pendurados acompanhando o fio
-  const garland = $("#garland");
-  const BULBS = 12;
-  for (let k = 0; k < BULBS; k++) {
-    const x = ((k + 0.5) / BULBS) * 100;
-    const phase = ((x / 100) * 4) % 1; // 4 curvas no fio
-    const sag = Math.sin(phase * Math.PI);
-    const b = document.createElement("span");
-    const ghost = k % 2 === 1;
-    b.className = `bulb ${ghost ? "is-ghost" : "is-pumpkin"}`;
-    b.textContent = ghost ? "👻" : "🎃";
-    b.style.setProperty("--x", `${x}%`);
-    b.style.setProperty("--y", `${10 + sag * 30}px`);
-    b.style.setProperty("--delay", `${-Math.random() * 3}s`);
-    garland.appendChild(b);
-  }
-
-  function releaseBat() {
-    if (document.hidden) return;
-    const b = document.createElement("span");
-    b.className = "bat";
-    b.textContent = "🦇";
-    b.style.top = `${10 + Math.random() * 50}vh`;
-    b.style.left = "0";
-    document.body.appendChild(b);
-    setTimeout(() => b.remove(), 9500);
-  }
-  setTimeout(releaseBat, 1500);
-  setInterval(releaseBat, 11000);
 
   route();
 })();
