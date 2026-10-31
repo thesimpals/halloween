@@ -10,6 +10,8 @@
     return a;
   };
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const packSplit = (x) => (window.splitPack ? window.splitPack(x) : [x, null]);
+  const packNote = (p, how) => (p ? `<p class="pack-note">Requer <b>${esc(p)}</b>. Não tem? ${how}</p>` : "");
   const REROLL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></svg>`;
 
   // ---------------- Bingo Maluco ----------------
@@ -148,7 +150,8 @@
       ${death !== null && !spinning ? `
       <div class="result-card">
         <p class="result-kicker">Destino</p>
-        <p class="result-big">${esc(DEATHS[death][0])}</p>
+        <p class="result-big">${esc(packSplit(DEATHS[death][0])[0])}</p>
+        ${packNote(packSplit(DEATHS[death][0])[1], "Gire de novo")}
         <p class="result-text">${esc(DEATHS[death][1])}</p>
       </div>` : ""}`;
     api.body.querySelector("[data-spin]").addEventListener("click", () => {
@@ -212,32 +215,73 @@
   ];
   const PHASE_OF = PHASES.flatMap((p, k) => Array(p.gens).fill(k)); // geração -> fase
   const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
+  // Cada geração ganha um pacote de desafios: maldição + traço e carreira do herdeiro + 2 objetivos.
+  const GEN_TRAITS = [
+    ["Ambicioso", "Malvado", "Perfeccionista", "Ativo", "Materialista"],
+    ["Romântico", "Alegre", "Criativo", "Bom", "Gourmet"],
+    ["Malvado", "Melancólico", "Solitário", "Gênio", "Esquentado"],
+    ["Preguiçoso", "Esnobe", "Materialista", "Criativo", "Desleixado"],
+    ["Bom", "Romântico", "Alegre", "Ambicioso"],
+  ];
+  const CAREERS = ["Astronauta", "Atleta", "Negócios", "Criminoso", "Culinária", "Artista (Entretenimento)", "Pintor", "Agente Secreto", "Escritor", "Guru da Tecnologia", "Influenciador de Estilo", "Autônomo(a)"];
+  const GEN_GOALS = [
+    ["Construir a casa da família do zero", "Ter o primeiro filho", "Juntar §10.000", "Fazer 3 amigos na vizinhança", "Plantar uma horta no quintal"],
+    ["Ter pelo menos 2 filhos", "Ensinar uma habilidade ao filho até o nível 5", "Dar uma festa de casamento", "Construir um cômodo novo na casa", "Chegar ao nível 5 da carreira"],
+    ["Fazer uma festa de Halloween", "Cultivar uma planta-vaca", "Chegar ao nível 10 em Lógica", "Ter um inimigo na vizinhança", "Pintar um quadro assustador e pendurar na sala"],
+    ["Chegar ao topo de uma carreira", "Vender um quadro por mais de §1.000", "Pagar todas as contas atrasadas", "Dar uma festa de aposentadoria pro herdeiro anterior", "Reformar a cozinha"],
+    ["Reunir a família inteira num último jantar", "Pendurar o retrato de todos os herdeiros", "Chegar ao nível 10 em Carisma", "Fazer as pazes com o inimigo da família"],
+  ];
+  const KEYWORDS = ["filho", "festa", "casa", "cômodo", "inimigo", "Carisma", "retrato", "§"];
   let legacy = null;
   let shown = 1;
-  const newLegacy = () => { legacy = PHASES.flatMap((p) => shuffle(p.pool).slice(0, p.gens)); shown = 1; };
+
+  function genPack(i, rule) {
+    const ph = PHASE_OF[i];
+    const [, text] = rule;
+    const forced = ["Malvado", "Bom"].find((t) => text.includes(`traço ${t}`) || text.includes(`é ${t}`));
+    const noJob = text.startsWith("Ninguém tem emprego");
+    const clash = (g) => KEYWORDS.some((k) => g.includes(k) && text.includes(k));
+    return {
+      rule,
+      trait: forced || pick(GEN_TRAITS[ph]),
+      career: noJob ? "Nenhuma (é a regra!)" : pick(CAREERS),
+      goals: shuffle(GEN_GOALS[ph].filter((g) => !clash(g))).slice(0, 2),
+    };
+  }
+  const newLegacy = () => {
+    legacy = PHASES.flatMap((p) => shuffle(p.pool).slice(0, p.gens)).map((r, i) => genPack(i, r));
+    shown = 1;
+  };
   const skulls = (d) => `<span class="skulls" title="Dificuldade ${d} de 3">${[1, 2, 3].map((k) => `<span class="${k <= d ? "on" : ""}">☠&#xFE0E;</span>`).join("")}</span>`;
 
   function renderLegado(api) {
     if (!legacy) newLegacy();
     api.body.innerHTML = `
-      <p class="game-lead">Uma maldição por geração. Revele uma de cada vez e tente chegar à décima!</p>
-      <ol class="gen-list">${legacy.map(([t, r, d], i) => i < shown ? `
+      <p class="game-lead">Cada geração tem uma maldição, um herdeiro e objetivos. Revele uma de cada vez e tente chegar à décima!</p>
+      <ol class="gen-list">${legacy.map((g, i) => {
+        const [t, r, d] = g.rule;
+        return i < shown ? `
         <li class="gen">
           <span class="gen-n">${ROMAN[i]}</span>
           <div class="gen-body">
             <p class="gen-kicker">${i + 1}ª geração · ${PHASES[PHASE_OF[i]].name} ${skulls(d)}</p>
             <p class="gen-title">${esc(t)}</p>
-            <p class="gen-rule">${esc(r)}</p>
+            <p class="gen-rule"><b>Maldição:</b> ${esc(packSplit(r)[0])}</p>
+            ${packNote(packSplit(r)[1], "Troque no 🔄")}
+            <div class="gen-tags"><span class="gen-tag">Herdeiro <b>${esc(g.trait)}</b></span><span class="gen-tag">Carreira <b>${esc(g.career)}</b></span></div>
+            <ul class="gen-goals">${g.goals.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
           </div>
-          <button type="button" class="reroll gen-reroll" data-gen="${i}" aria-label="Trocar regra da geração ${i + 1}" title="Trocar">${REROLL}</button>
+          <button type="button" class="reroll gen-reroll" data-gen="${i}" aria-label="Trocar desafios da geração ${i + 1}" title="Trocar">${REROLL}</button>
         </li>` : i === shown ? `
-        <li><button type="button" class="gen gen-locked" data-next><span class="gen-n">${ROMAN[i]}</span><span class="gen-body"><span class="gen-title">Revelar a ${i + 1}ª geração</span><span class="gen-rule">Toque quando a geração anterior terminar</span></span></button></li>` : "").join("")}
+        <li><button type="button" class="gen gen-locked" data-next><span class="gen-n">${ROMAN[i]}</span><span class="gen-body"><span class="gen-title">Revelar a ${i + 1}ª geração</span><span class="gen-rule">Toque quando a geração anterior terminar</span></span></button></li>` : "";
+      }).join("")}
       </ol>
       ${shown < 10 ? `<p class="game-note">${10 - shown} geraç${10 - shown > 1 ? "ões" : "ão"} ainda escondida${10 - shown > 1 ? "s" : ""}…</p>` : `<p class="game-note"><b>Legado completo!</b> 10 gerações de pura maldição.</p>`}`;
     api.body.querySelectorAll("[data-gen]").forEach((b) => b.addEventListener("click", () => {
       const i = Number(b.dataset.gen);
-      const pool = PHASES[PHASE_OF[i]].pool.filter((x) => !legacy.includes(x));
-      legacy[i] = pick(pool);
+      const used = legacy.map((g) => g.rule);
+      const pool = PHASES[PHASE_OF[i]].pool.filter((x) => !used.includes(x));
+      legacy[i] = genPack(i, pick(pool.length ? pool : PHASES[PHASE_OF[i]].pool));
       renderLegado(api);
     }));
     const next = api.body.querySelector("[data-next]");
@@ -248,7 +292,7 @@
       const items = api.body.querySelectorAll(".gen:not(.gen-locked)");
       items[items.length - 1].scrollIntoView({ behavior: "smooth", block: "center" });
     });
-    const list = legacy.slice(0, shown).map(([t, r, d], i) => `${i + 1}ª geração (${PHASES[PHASE_OF[i]].name}) · ${t} ${"☠".repeat(d)}\n   ${r}`).join("\n");
+    const list = legacy.slice(0, shown).map((g, i) => `*${i + 1}ª geração · ${g.rule[0]}* ${"☠".repeat(g.rule[2])}\n   Maldição: ${g.rule[1]}\n   Herdeiro: ${g.trait} · Carreira: ${g.career}\n   Objetivos: ${g.goals.join("; ")}`).join("\n");
     api.setShare(`♛ *Legado Assombrado · Migas Sims*\n${list}`);
   }
 
@@ -260,7 +304,7 @@
     ["Três gerações", [["Avô ou avó", "Idoso"], ["Pai ou mãe", "Adulto"], ["Neto(a)", "Criança"], ["Neto(a)", "Criança"]]],
     ["Colegas de quarto estranhos", [["Colega", "Jovem adulto"], ["Colega", "Jovem adulto"], ["Colega", "Jovem adulto"]]],
     ["Casal recém-casado", [["Cônjuge", "Jovem adulto"], ["Cônjuge", "Jovem adulto"]]],
-    ["Família grande", [["Pai ou mãe", "Adulto"], ["Pai ou mãe", "Adulto"], ["Filho(a)", "Adolescente"], ["Gêmeo(a)", "Criança"], ["Gêmeo(a)", "Criança"], ["Tio(a) esquisito(a)", "Adulto"]]],
+    ["Família grande", [["Pai ou mãe", "Adulto"], ["Pai ou mãe", "Adulto"], ["Filho(a)", "Adolescente"], ["Gêmeo(a)", "Criança"], ["Gêmeo(a)", "Criança"]]],
   ];
   const TWISTS = [
     "Dois membros da família não se suportam.",
@@ -275,15 +319,34 @@
   ];
   let family = null;
 
+  // A família inteira segue um tema só (o mesmo das criaturas do tarot):
+  // a casa, o visual de cada um (por idade) e os traços combinam entre si.
+  const FAM_NOME = {
+    Vampiro: "Clã de vampiros", Bruxa: "Coven de bruxas", Lobisomem: "Matilha de lobisomens",
+    Alienígena: "Aliens disfarçados", Sereia: "Família do pântano", fantasma: "Fantasmas vitorianos",
+    zumbi: "Família zumbi", múmia: "Dinastia de múmias", noiva: "Casamento eterno",
+    palhaço: "Trupe do circo abandonado", boneca: "Coleção de porcelana", cientista: "Cientistas malucos",
+  };
+  const YOUNG = ["Criança", "Adolescente", "Bebê"];
+
   function newFamily() {
-    const [name, roles] = pick(STRUCTS);
-    const looks = window.DECKS.sim.cards.find((c) => c.cat === "Criatura").options;
-    const traits = window.DECKS.sim.cards.find((c) => c.pick).options;
+    const [structure, roles] = pick(STRUCTS);
+    const themes = window.THEMES.sim;
+    const key = pick(Object.keys(themes));
+    const t = themes[key];
+    const adults = shuffle(t.familia.adultos), kids = shuffle(t.familia.jovens), traits = shuffle(t.Personalidade);
+    let a = 0, k = 0;
     family = {
-      name,
-      members: (() => { const L = shuffle(looks), T = shuffle(traits); return roles.map(([role, age], k) => ({ role, age, look: L[k], trait: T[k] })); })(),
+      name: (Object.entries(FAM_NOME).find(([w]) => key.includes(w)) || [0, "Família assombrada"])[1],
+      structure,
+      pack: window.splitPack ? window.splitPack(key)[1] : null,
+      members: roles.map(([role, age], i) => ({
+        role, age,
+        look: YOUNG.includes(age) ? kids[k++ % kids.length] : adults[a++ % adults.length],
+        trait: traits[i % traits.length],
+      })),
       twist: pick(TWISTS),
-      house: pick(window.DECKS.casa.cards.find((c) => c.cat === "Estilo da casa").options),
+      house: pick(t.familia.casa),
     };
   }
 
@@ -291,7 +354,9 @@
     if (!family) newFamily();
     api.body.innerHTML = `
       <div class="fam-head result-card">
-        <p class="result-kicker">${esc(family.name)} · ${family.members.length} Sims</p>
+        <p class="result-kicker">${esc(family.structure)} · ${family.members.length} Sims</p>
+        <p class="result-big">${esc(family.name)}</p>
+        ${family.pack ? `<p class="pack-note">Requer <b>${esc(family.pack)}</b>. Não tem? Toque em "Outra família"</p>` : ""}
         <p class="result-text"><b>Casa:</b> ${esc(family.house)}</p>
         <p class="result-text"><b>Drama:</b> ${esc(family.twist)}</p>
       </div>
@@ -303,7 +368,7 @@
           <span class="trait">${esc(m.trait)}</span>
         </div>`).join("")}
       </div>`;
-    api.setShare(`⚘ *Família Assombrada · ${family.name}*\nCasa: ${family.house}\nDrama: ${family.twist}\n${family.members.map((m) => `• ${m.role} (${m.age}): ${m.look} — ${m.trait}`).join("\n")}`);
+    api.setShare(`⚘ *Família Assombrada · ${family.name}*\n${family.structure}\nCasa: ${family.house}\nDrama: ${family.twist}\n${family.members.map((m) => `• ${m.role} (${m.age}): ${m.look} — ${m.trait}`).join("\n")}`);
   }
 
   window.GAMES = {

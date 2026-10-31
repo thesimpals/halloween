@@ -21,7 +21,16 @@
     }
     return a;
   };
-  function drawValue(card, previous) {
+  // opções da carta dentro do tema sorteado (criatura / estilo da casa)
+  const optionsFor = (card, theme) => (theme && theme[card.cat]) || card.options;
+  const themeOf = (mode, values) => {
+    const deck = DECKS[mode];
+    const i = deck.cards.findIndex((c) => c.cat === deck.themeCat);
+    return i < 0 ? null : (window.THEMES[mode] || {})[values[i]] || null;
+  };
+
+  function drawValue(card, previous, theme) {
+    card = { ...card, options: optionsFor(card, theme) };
     if (card.pick) {
       // sorteia traços sem pares que o jogo não deixa juntar (ex.: Ativo + Preguiçoso)
       const clash = (a, b) => (card.conflicts || []).some(([x, y]) => (a === x && b === y) || (a === y && b === x));
@@ -45,12 +54,20 @@
     </svg>`;
 
 
+  // "Texto (Pacote)" -> texto + aviso de pacote
+  const PACK_RE = /\s*\(([^)]*(?:Vampiros|Lobisomens|Estações|Gatos e Cães|StrangerVille|Get to Work|Island Living|Realm of Magic)[^)]*)\)\s*$/;
+  const splitPack = (s) => { const m = String(s).match(PACK_RE); return m ? [String(s).replace(PACK_RE, ""), m[1]] : [String(s), null]; };
+  window.splitPack = splitPack;
+
   function ideaHTML(value) {
     if (Array.isArray(value)) {
-      return `<span class="traits">${value.map((t) => `<span class="trait">${esc(t)}</span>`).join("")}</span>`;
+      const packs = value.map((t) => splitPack(t)[1]).filter(Boolean);
+      return `<span class="traits">${value.map((t) => `<span class="trait">${esc(splitPack(t)[0])}</span>`).join("")}</span>${packs.length ? packNote(packs[0]) : ""}`;
     }
-    return esc(value);
+    const [text, pack] = splitPack(value);
+    return `<span class="idea-text">${esc(text)}</span>${pack ? packNote(pack) : ""}`;
   }
+  const packNote = (pack) => `<span class="pack-note">Requer <b>${esc(pack)}</b>. Não tem? Gere de novo no 🔄</span>`;
 
   function cardHTML(card, value, i) {
     const r = (Math.random() * 24 - 12).toFixed(1);
@@ -80,7 +97,13 @@
   // ---------- Telas ----------
   function startReading(mode) {
     const deck = DECKS[mode];
-    state = { mode, values: deck.cards.map((c) => drawValue(c)), revealed: new Set() };
+    // primeiro o tema, depois o resto dentro dele
+    const values = [];
+    const ti = deck.cards.findIndex((c) => c.cat === deck.themeCat);
+    if (ti >= 0) values[ti] = drawValue(deck.cards[ti]);
+    const theme = themeOf(mode, values);
+    deck.cards.forEach((c, i) => { if (i !== ti) values[i] = drawValue(c, undefined, theme); });
+    state = { mode, values, revealed: new Set() };
     const title = $("#reading-title");
     title.textContent = deck.title;
     title.dataset.text = deck.title;
@@ -187,15 +210,28 @@
   }
 
   function reroll(i) {
-    const card = DECKS[state.mode].cards[i];
-    const el = grid.querySelector(`.card[data-i="${i}"]`);
-    state.values[i] = drawValue(card, state.values[i]);
-    el.classList.add("is-rerolling");
-    setTimeout(() => {
-      el.querySelector(".idea").innerHTML = ideaHTML(state.values[i]);
-      el.classList.remove("is-rerolling");
-      sparkle(el);
-    }, 220);
+    const deck = DECKS[state.mode];
+    const card = deck.cards[i];
+    const isTheme = card.cat === deck.themeCat;
+    if (isTheme) {
+      // trocou o tema: todas as outras cartas mudam junto para combinar
+      state.values[i] = drawValue(card, state.values[i]);
+      const theme = themeOf(state.mode, state.values);
+      deck.cards.forEach((c, k) => { if (k !== i) state.values[k] = drawValue(c, undefined, theme); });
+    } else {
+      state.values[i] = drawValue(card, state.values[i], themeOf(state.mode, state.values));
+    }
+    const changed = isTheme ? deck.cards.map((_, k) => k) : [i];
+    changed.forEach((k) => {
+      const el = grid.querySelector(`.card[data-i="${k}"]`);
+      el.classList.add("is-rerolling");
+      setTimeout(() => {
+        el.querySelector(".idea").innerHTML = ideaHTML(state.values[k]);
+        el.classList.remove("is-rerolling");
+        if (state.revealed.has(k)) sparkle(el);
+      }, 220);
+    });
+    if (isTheme && state.revealed.size > 1) toast("Novo tema! As outras cartas mudaram para combinar.");
     if (navigator.vibrate) navigator.vibrate(8);
   }
 
