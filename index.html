@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Tarot Assombrado · Migas Sims</title>
+  <meta name="description" content="Tire as cartas e descubra seu desafio de Halloween no The Sims 4: construção ou criar um Sim.">
+  <meta name="theme-color" content="#23094b">
+
+  <meta property="og:title" content="🔮 Tarot Assombrado · Migas Sims">
+  <meta property="og:description" content="Deixe as cartas decidirem seu desafio de Halloween no The Sims 4: construção ou criar um Sim!">
+  <meta property="og:image" content="https://thesimpals.github.io/halloween/og.png">
+  <meta property="og:type" content="website">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔮</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="sky" aria-hidden="true">
+    <div class="blob blob-a"></div>
+    <div class="blob blob-b"></div>
+    <div class="blob blob-c"></div>
+    <div id="stars"></div>
+  </div>
+
+  <svg class="web" viewBox="0 0 200 200" aria-hidden="true">
+    <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M200 0 L60 200 M200 0 L0 120 M200 0 L120 200 M200 0 L0 40"/>
+      <path d="M200 40 Q178 30 168 12"/>
+      <path d="M200 80 Q165 62 150 40 Q138 25 136 0"/>
+      <path d="M200 120 Q150 100 128 70 Q105 48 100 0"/>
+      <path d="M200 165 Q140 140 108 104 Q78 72 66 22"/>
+      <path d="M158 200 Q118 160 88 140 Q50 112 18 104"/>
+    </g>
+    <line x1="150" y1="40" x2="150" y2="96" stroke="currentColor" stroke-width="1.5"/>
+    <g class="spider">
+      <ellipse cx="150" cy="104" rx="9" ry="10" fill="#1a0838"/>
+      <circle cx="146" cy="102" r="2.2" fill="#fff"/><circle cx="154" cy="102" r="2.2" fill="#fff"/>
+      <path d="M141 100 l-9 -6 M141 106 l-10 2 M141 110 l-8 8 M159 100 l9 -6 M159 106 l10 2 M159 110 l8 8" stroke="#1a0838" stroke-width="2.4" stroke-linecap="round"/>
+    </g>
+  </svg>
+
+  <header class="topbar">
+    <a class="logo" href="./" data-home>
+      <svg class="logo-ghost" viewBox="0 0 80 100" aria-hidden="true">
+        <path d="M4 42 C4 18 20 4 40 4 C60 4 76 18 76 42 L76 92 Q69 84 62 92 Q55 100 48 92 Q41 84 34 92 Q27 100 20 92 Q12 84 4 92 Z" fill="#fff" stroke="#1a0838" stroke-width="6" stroke-linejoin="round"/>
+        <ellipse cx="29" cy="42" rx="5" ry="7" fill="#1a0838"/><ellipse cx="51" cy="42" rx="5" ry="7" fill="#1a0838"/>
+        <ellipse cx="22" cy="55" rx="5" ry="3" fill="#ff86c8"/><ellipse cx="58" cy="55" rx="5" ry="3" fill="#ff86c8"/>
+      </svg>
+      <span class="logo-text"><span class="logo-migas">Migas</span> <span class="logo-sims">Sims</span></span>
+    </a>
+    <span class="date-chip">🎃 31 de outubro</span>
+  </header>
+
+  <main>
+    <!-- Tela inicial -->
+    <section id="intro" class="screen" aria-labelledby="intro-title">
+      <div class="hero">
+        <div class="hero-text">
+          <p class="kicker">🕯️ Especial de Halloween</p>
+          <h1 id="intro-title">
+            <span class="h-lime">Tarot</span>
+            <span class="h-violet">Assombrado</span>
+          </h1>
+          <p class="pill-sub">Escolha um caminho e deixe as cartas decidirem seu desafio no The Sims 4 👻</p>
+        </div>
+
+        <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 340 330">
+            <defs>
+              <radialGradient id="ball" cx="40%" cy="35%" r="75%">
+                <stop offset="0" stop-color="#f3e8ff"/>
+                <stop offset=".35" stop-color="#b18cff"/>
+                <stop offset="1" stop-color="#4a20a8"/>
+              </radialGradient>
+              <radialGradient id="glow">
+                <stop offset="0" stop-color="#c8f250" stop-opacity=".55"/>
+                <stop offset="1" stop-color="#c8f250" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+            <circle class="glow" cx="160" cy="150" r="150" fill="url(#glow)"/>
+            <!-- bola de cristal -->
+            <circle cx="160" cy="150" r="98" fill="url(#ball)" stroke="#1a0838" stroke-width="7"/>
+            <g class="ball-inside">
+              <path d="M178 118 a34 34 0 1 1 -40 44 a28 28 0 1 0 40 -44 z" fill="#c8f250" stroke="#1a0838" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M118 112 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3z" fill="#ffa630"/>
+              <path d="M196 176 l2.4 6 6 2.4 -6 2.4 -2.4 6 -2.4 -6 -6 -2.4 6 -2.4z" fill="#fff"/>
+              <circle cx="200" cy="120" r="3" fill="#fff"/>
+            </g>
+            <ellipse cx="122" cy="104" rx="26" ry="13" fill="#fff" opacity=".7" transform="rotate(-35 122 104)"/>
+            <!-- base -->
+            <path d="M92 236 Q160 262 228 236 L250 292 Q160 318 70 292 Z" fill="#ffa630" stroke="#1a0838" stroke-width="7" stroke-linejoin="round"/>
+            <path d="M86 270 Q160 292 234 270" fill="none" stroke="#1a0838" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="160" cy="282" r="9" fill="#c8f250" stroke="#1a0838" stroke-width="4"/>
+            <!-- doce de milho -->
+            <g transform="translate(36 236) rotate(-18)">
+              <path d="M0 0 L16 38 L32 0 Q16 -8 0 0Z" fill="#fff7ea" stroke="#1a0838" stroke-width="4" stroke-linejoin="round"/>
+              <path d="M2 4 Q16 -3 30 4 L26 13 Q16 9 6 13 Z" fill="#ffa630"/>
+              <path d="M10 22 L22 22 L16 38 Z" fill="#ffd23f"/>
+            </g>
+            <!-- fantasma -->
+            <g class="hero-ghost">
+              <g transform="translate(228 10) rotate(12)">
+                <path d="M4 42 C4 18 20 4 40 4 C60 4 76 18 76 42 L76 92 Q69 84 62 92 Q55 100 48 92 Q41 84 34 92 Q27 100 20 92 Q12 84 4 92 Z" fill="#fff" stroke="#1a0838" stroke-width="5" stroke-linejoin="round"/>
+                <ellipse cx="29" cy="42" rx="5" ry="7" fill="#1a0838"/><ellipse cx="51" cy="42" rx="5" ry="7" fill="#1a0838"/>
+                <ellipse cx="22" cy="55" rx="5" ry="3" fill="#ff86c8"/><ellipse cx="58" cy="55" rx="5" ry="3" fill="#ff86c8"/>
+                <path d="M35 56 Q40 61 45 56" fill="none" stroke="#1a0838" stroke-width="3.5" stroke-linecap="round"/>
+              </g>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <h2 class="choose-title">Qual vai ser o desafio?</h2>
+      <div class="choices">
+        <button class="choice choice-sim" type="button" data-mode="sim">
+          <span class="choice-icon">🧛</span>
+          <span class="choice-body">
+            <span class="choice-title">Criar um Sim</span>
+            <span class="choice-desc">Do cabelo à personalidade, tudo no CAS</span>
+          </span>
+          <span class="choice-arrow" aria-hidden="true">→</span>
+        </button>
+        <button class="choice choice-casa" type="button" data-mode="casa">
+          <span class="choice-icon">🏚️</span>
+          <span class="choice-body">
+            <span class="choice-title">Construção</span>
+            <span class="choice-desc">Uma casa assombrada, cômodo por cômodo</span>
+          </span>
+          <span class="choice-arrow" aria-hidden="true">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Tiragem -->
+    <section id="reading" class="screen" aria-labelledby="reading-title" hidden>
+      <div class="reading-head">
+        <button class="back" type="button" data-home>← Voltar</button>
+        <p class="kicker" id="reading-kicker"></p>
+        <h2 id="reading-title" class="reading-title"></h2>
+        <p class="hint" id="hint">Toque nas cartas para revelar seu destino ✨</p>
+        <div class="progress" role="progressbar" aria-valuemin="0" id="progress">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+        <p class="progress-label" id="progress-label"></p>
+      </div>
+
+      <div class="grid" id="grid"></div>
+
+      <div class="done" id="done" hidden>
+        <p class="done-title">✨ Tiragem completa! ✨</p>
+        <p>Agora é com você no The Sims 4. Manda o resultado no grupo e mostra o que criou! 💜</p>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-lime" type="button" id="btn-reveal">🔮 Revelar tudo</button>
+        <button class="btn btn-ghost" type="button" id="btn-again">🔄 Nova tiragem</button>
+        <button class="btn btn-orange" type="button" id="btn-share">💬 Compartilhar</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Feito com 🎃 para a comunidade <strong>Migas Sims</strong> · Halloween 2026
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
