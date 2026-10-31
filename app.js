@@ -45,7 +45,7 @@
 
   function cardHTML(card, value, i) {
     const r = (Math.random() * 24 - 12).toFixed(1);
-    const back = `img/verso-${(i % 12) + 1}.webp`;
+    const back = `img/verso-${(i % 12) + 1}.webp?v=3`;
     return `
       <div class="card is-dealing" role="button" tabindex="0" data-i="${i}" style="--i:${i};--r:${r}"
            aria-label="Revelar carta ${esc(card.cat)}">
@@ -55,7 +55,7 @@
             <span class="holo"></span>
           </div>
           <div class="card-face card-front">
-            <img src="img/carta-${card.art}.webp" alt="">
+            <img src="img/carta-${card.art}.webp?v=3" alt="">
             <div class="front-panel">
               <span class="front-arcana">${esc(card.arcana)}</span>
               <span class="front-cat">${esc(card.cat)}</span>
@@ -297,8 +297,8 @@
 
   // Carrega as artes das cartas antes de a pessoa escolher
   const preload = () => {
-    const arts = new Set(Object.values(DECKS).flatMap((d) => d.cards.map((c) => `img/carta-${c.art}.webp`)));
-    for (let k = 1; k <= 12; k++) arts.add(`img/verso-${k}.webp`);
+    const arts = new Set(Object.values(DECKS).flatMap((d) => d.cards.map((c) => `img/carta-${c.art}.webp?v=3`)));
+    for (let k = 1; k <= 12; k++) arts.add(`img/verso-${k}.webp?v=3`);
     arts.forEach((src) => { const im = new Image(); im.src = src; });
   };
   if ("requestIdleCallback" in window) requestIdleCallback(preload); else setTimeout(preload, 1200);
