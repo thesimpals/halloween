@@ -146,12 +146,16 @@ h1 { margin: 0; font-weight: 400; isolation: isolate; }
   color: var(--ink);
   -webkit-text-stroke: .15em var(--ink);
   text-shadow: 0 .08em 0 var(--ink), 0 0 .6em rgba(255, 79, 200, .55);
+  /* folga em cima e embaixo para acentos e "ç"/"g" receberem o preenchimento */
+  padding: .22em 0 .28em;
+  margin: -.22em 0 -.28em;
   --fill: linear-gradient(180deg, #ffffff 0%, #ffe6f7 38%, #ffb3e8 72%, #f48ad8 100%);
 }
 .candy::after {
   content: attr(data-text);
   position: absolute;
   inset: 0;
+  padding: inherit;
   color: transparent;
   -webkit-text-stroke: 0;
   text-shadow: none;
