@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Tarot Assombrado · Migas Sims</title>
   <meta name="description" content="Tire as cartas e descubra seu desafio de Halloween no The Sims 4: construção ou criar um Sim.">
-  <meta name="theme-color" content="#12041a">
+  <meta name="theme-color" content="#170622">
 
   <meta property="og:title" content="Tarot Assombrado · Migas Sims">
   <meta property="og:description" content="Deixe as cartas decidirem seu desafio de Halloween no The Sims 4: construção ou criar um Sim.">
@@ -18,121 +18,83 @@
   <link rel="apple-touch-icon" href="icone-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Cinzel:wght@500;700&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Cinzel:wght@600;700&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Fundo: névoa + textura -->
+  <!-- Cenário fixo: céu, lua, casa ao longe, teias e luz de vela -->
   <div class="nebula" aria-hidden="true">
     <span class="mist m1"></span>
     <span class="mist m2"></span>
     <span class="mist m3"></span>
-    <span class="mist m4"></span>
+  </div>
+  <div class="backdrop" aria-hidden="true">
+    <img class="moon" src="img/lua.webp" alt="">
+    <img class="bat bat-a" src="img/morcego-1.webp" alt="">
+    <img class="bat bat-b" src="img/morcego-2.webp" alt="">
+    <img class="house" src="img/casa.webp" alt="">
+    <img class="web web-tl" src="img/teia-1.webp" alt="">
+    <img class="web web-tr" src="img/teia-4.webp" alt="">
+    <span class="warm"></span>
   </div>
   <div class="grain" aria-hidden="true"></div>
 
-  <!-- Símbolos reutilizados -->
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <defs>
-      <linearGradient id="gemFill" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0" stop-color="#ffc2ee"/>
-        <stop offset=".45" stop-color="#ff4fd1"/>
-        <stop offset="1" stop-color="#6a138a"/>
-      </linearGradient>
-      <symbol id="gem" viewBox="0 0 200 300">
-        <polygon points="100,6 192,150 100,294 8,150" fill="url(#gemFill)"/>
-        <polygon points="100,6 192,150 100,150" fill="#a21fb8" opacity=".55"/>
-        <polygon points="8,150 100,150 100,294" fill="#3d0a55" opacity=".55"/>
-        <polygon points="100,6 8,150 100,150" fill="#fff" opacity=".2"/>
-        <polygon points="100,6 192,150 100,294 8,150" fill="none" stroke="#ffd3f2" stroke-width="4" stroke-linejoin="round"/>
-        <path d="M100 6 V294 M8 150 H192" stroke="#ffd3f2" stroke-width="1.5" opacity=".5"/>
-        <path d="M76 98 L70 70 L88 84 L100 62 L112 84 L130 70 L124 98 Z" fill="rgba(255,211,242,.22)" stroke="#ffd3f2" stroke-width="4" stroke-linejoin="round"/>
-        <circle cx="70" cy="66" r="4" fill="#ffd3f2"/><circle cx="100" cy="57" r="4" fill="#ffd3f2"/><circle cx="130" cy="66" r="4" fill="#ffd3f2"/>
-      </symbol>
-      <symbol id="ghost" viewBox="0 0 80 100">
-        <path d="M4 42 C4 18 20 4 40 4 C60 4 76 18 76 42 L76 92 Q69 84 62 92 Q55 100 48 92 Q41 84 34 92 Q27 100 20 92 Q12 84 4 92 Z" fill="#fff3fb" stroke="#1a0624" stroke-width="4" stroke-linejoin="round"/>
-        <ellipse cx="29" cy="44" rx="5" ry="7" fill="#1a0624"/><ellipse cx="51" cy="44" rx="5" ry="7" fill="#1a0624"/>
-        <ellipse cx="40" cy="60" rx="4" ry="5" fill="#1a0624"/>
-        <ellipse cx="20" cy="56" rx="5" ry="3" fill="#ff8fdc"/><ellipse cx="60" cy="56" rx="5" ry="3" fill="#ff8fdc"/>
-      </symbol>
-      <symbol id="pumpkin" viewBox="0 0 140 120">
-        <path d="M66 22 C64 12 68 4 78 2" fill="none" stroke="#1a0624" stroke-width="8" stroke-linecap="round"/>
-        <path d="M66 22 C64 12 68 4 78 2" fill="none" stroke="#6f8f2c" stroke-width="4" stroke-linecap="round"/>
-        <ellipse cx="44" cy="70" rx="36" ry="44" fill="#ff8a2a" stroke="#1a0624" stroke-width="4"/>
-        <ellipse cx="96" cy="70" rx="36" ry="44" fill="#ff8a2a" stroke="#1a0624" stroke-width="4"/>
-        <ellipse cx="70" cy="68" rx="34" ry="48" fill="#ff9a3d" stroke="#1a0624" stroke-width="4"/>
-        <path d="M48 56 L60 70 L40 70 Z M92 56 L100 70 L80 70 Z" fill="#ffe08a" stroke="#1a0624" stroke-width="3" stroke-linejoin="round"/>
-        <path d="M42 86 L52 94 L60 86 L70 96 L80 86 L88 94 L98 86 Q70 110 42 86 Z" fill="#ffe08a" stroke="#1a0624" stroke-width="3" stroke-linejoin="round"/>
-      </symbol>
-      <symbol id="bat" viewBox="0 0 100 60">
-        <path d="M50 22 L46 12 L44 20 C34 10 18 8 4 14 C14 18 18 26 16 34 C24 30 32 32 36 40 C40 34 46 34 50 38 C54 34 60 34 64 40 C68 32 76 30 84 34 C82 26 86 18 96 14 C82 8 66 10 56 20 L54 12 Z" fill="#1a0624" stroke="#ff8fdc" stroke-width="1.5" stroke-linejoin="round"/>
-      </symbol>
-      <symbol id="sparkle" viewBox="0 0 40 40">
-        <path d="M20 0 C21 12 28 19 40 20 C28 21 21 28 20 40 C19 28 12 21 0 20 C12 19 19 12 20 0Z"/>
-      </symbol>
-    </defs>
-  </svg>
-
   <header class="topbar">
     <a class="wordmark" href="./" data-home>
-      <img class="wordmark-icon" src="icone-limpo.svg" alt="" width="34" height="34">
+      <img src="icone-limpo.svg" alt="" width="34" height="34">
       Migas Sims
     </a>
-    <span class="topbar-date">31 · 10 · 2026</span>
+    <span class="topbar-date">31 · 10</span>
   </header>
 
   <main>
     <!-- Tela inicial -->
     <section id="intro" class="screen intro" aria-labelledby="intro-title">
-      <div class="intro-art" aria-hidden="true">
-        <svg class="ring" viewBox="0 0 400 400">
-          <defs><path id="ringPath" d="M200 200 m-170 0 a170 170 0 1 1 340 0 a170 170 0 1 1 -340 0"/></defs>
-          <circle cx="200" cy="200" r="190" fill="none" stroke="currentColor" stroke-width="1"/>
-          <circle cx="200" cy="200" r="184" fill="none" stroke="currentColor" stroke-width="6" stroke-dasharray="1 9"/>
-          <circle cx="200" cy="200" r="150" fill="none" stroke="currentColor" stroke-width="1"/>
-          <text class="ring-text"><textPath href="#ringPath">tarot assombrado · migas sims · halloween · tarot assombrado · migas sims · halloween ·</textPath></text>
-        </svg>
-        <svg class="big-gem" viewBox="0 0 200 300"><use href="#gem"/></svg>
-        <svg class="art-ghost" viewBox="0 0 80 100"><use href="#ghost"/></svg>
-        <svg class="art-bat bat-1" viewBox="0 0 100 60"><use href="#bat"/></svg>
-        <svg class="art-bat bat-2" viewBox="0 0 100 60"><use href="#bat"/></svg>
-      </div>
-      <svg class="art-pumpkin" viewBox="0 0 140 120" aria-hidden="true"><use href="#pumpkin"/></svg>
-
       <div class="intro-copy">
         <p class="eyebrow">Especial de Halloween</p>
-        <h1 id="intro-title"><span class="t1">Tarot</span><span class="t2">Assombrado</span></h1>
+        <h1 id="intro-title">
+          <span class="candy candy-1" data-text="Tarot">Tarot</span>
+          <span class="candy candy-2" data-text="Assombrado">Assombrado</span>
+        </h1>
         <p class="lede">Escolha uma carta. O resto do seu desafio no The Sims 4 fica por conta do destino.</p>
+      </div>
 
+      <div class="deck">
+        <span class="deco-ghost" aria-hidden="true"><img src="arte/fantasma-maos.svg" alt=""></span>
+        <div class="fan" aria-hidden="true">
+          <img src="img/verso-6.webp" alt="">
+          <img src="img/verso-2.webp" alt="">
+          <img src="img/verso-7.webp" alt="">
+        </div>
         <div class="pick" role="group" aria-label="Escolha o desafio">
-          <button class="pick-card" type="button" data-mode="sim">
-            <span class="pick-num">I</span>
-            <svg class="pick-art" viewBox="0 0 120 130" aria-hidden="true">
-              <use href="#ghost" x="22" y="34" width="76" height="95"/>
-              <path d="M30 46 Q60 38 90 46 Q86 52 60 50 Q34 52 30 46Z" fill="#1a0624"/>
-              <path d="M44 46 L60 4 L76 46 Z" fill="#2a0a36" stroke="#1a0624" stroke-width="4" stroke-linejoin="round"/>
-              <path d="M46 40 Q60 36 74 40" stroke="#ff4fd1" stroke-width="5" fill="none"/>
-            </svg>
-            <span class="pick-title">Criar um Sim</span>
-            <span class="pick-desc">Do cabelo à personalidade</span>
+          <button class="pick-card tilt" type="button" data-mode="sim">
+            <img src="img/carta-bruxa.webp" alt="">
+            <span class="plate">
+              <span class="plate-title">Criar um Sim</span>
+              <span class="plate-desc">Do cabelo à personalidade</span>
+            </span>
+            <span class="holo"></span>
           </button>
-          <button class="pick-card" type="button" data-mode="casa">
-            <span class="pick-num">II</span>
-            <svg class="pick-art" viewBox="0 0 120 130" aria-hidden="true">
-              <path d="M18 124 V62 L44 38 L70 62 V124 Z" fill="#2a0a36" stroke="#1a0624" stroke-width="4" stroke-linejoin="round"/>
-              <path d="M70 124 V50 L86 18 L102 50 V124 Z" fill="#3a0f4a" stroke="#1a0624" stroke-width="4" stroke-linejoin="round"/>
-              <path d="M10 66 L44 34 L76 64" fill="none" stroke="#1a0624" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
-              <rect x="32" y="70" width="11" height="15" rx="5" fill="#ffb54a"/>
-              <rect x="48" y="70" width="11" height="15" rx="5" fill="#ffb54a"/>
-              <rect x="80" y="60" width="12" height="18" rx="6" fill="#ff4fd1"/>
-              <path d="M36 124 V104 a8 8 0 0 1 16 0 V124" fill="#1a0624"/>
-              <rect x="80" y="92" width="12" height="16" rx="3" fill="#ffb54a"/>
-              <path d="M6 124 H114" stroke="#1a0624" stroke-width="4" stroke-linecap="round"/>
-            </svg>
-            <span class="pick-title">Construção</span>
-            <span class="pick-desc">Cômodo por cômodo</span>
+          <button class="pick-card tilt" type="button" data-mode="casa">
+            <img src="img/carta-lua.webp" alt="">
+            <span class="plate">
+              <span class="plate-title">Construção</span>
+              <span class="plate-desc">Cômodo por cômodo</span>
+            </span>
+            <span class="holo"></span>
           </button>
         </div>
+        <p class="pick-hint">Toque em uma carta</p>
+      </div>
+
+      <div class="props" aria-hidden="true">
+        <div class="candles">
+          <img class="candle c1" src="img/vela-2.webp" alt="">
+          <img class="candle c2" src="img/vela-8.webp" alt="">
+          <img class="candle c3" src="img/vela-5.webp" alt="">
+        </div>
+        <img class="cat" src="img/gato.webp" alt="">
+        <img class="pumpkin" src="img/abobora.webp" alt="">
       </div>
     </section>
 
@@ -141,8 +103,8 @@
       <button class="back" type="button" data-home>← Voltar</button>
       <div class="reading-head">
         <div>
-          <p class="eyebrow" id="reading-eyebrow">Sua tiragem</p>
-          <h2 id="reading-title" class="reading-title"></h2>
+          <p class="eyebrow">Sua tiragem</p>
+          <h2 id="reading-title" class="reading-title candy" data-text=""></h2>
           <p class="hint">Toque nas cartas para revelar.</p>
         </div>
         <p class="counter" aria-live="polite"><span id="count">0</span><span class="counter-total">/<span id="total">0</span></span></p>
@@ -152,9 +114,9 @@
       <div class="grid" id="grid"></div>
 
       <div class="done" id="done" hidden>
-        <svg viewBox="0 0 40 40" aria-hidden="true"><use href="#sparkle"/></svg>
+        <img src="arte/fantasma-boo.svg" alt="" aria-hidden="true">
         <div>
-          <p class="done-title">Tiragem completa</p>
+          <p class="done-title">Tiragem completa!</p>
           <p>Agora é com você no The Sims 4. Manda o resultado no grupo!</p>
         </div>
       </div>

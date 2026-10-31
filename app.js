@@ -30,16 +30,11 @@
   // ---------- Cartas ----------
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-  const MINI_RING = `
-    <svg class="mini-ring" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="48" fill="none" stroke="currentColor" stroke-width=".8"/>
-      <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray=".6 4.4"/>
-    </svg>`;
   const REROLL_ICON = `
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>
     </svg>`;
-  const ORNAMENT = `<span class="ornament" aria-hidden="true"><svg viewBox="0 0 40 60"><polygon points="20,2 38,30 20,58 2,30" fill="currentColor"/></svg></span>`;
+
 
   function ideaHTML(value) {
     if (Array.isArray(value)) {
@@ -50,22 +45,24 @@
 
   function cardHTML(card, value, i) {
     const r = (Math.random() * 24 - 12).toFixed(1);
+    const back = `img/verso-${(i % 12) + 1}.webp`;
     return `
       <div class="card is-dealing" role="button" tabindex="0" data-i="${i}" style="--i:${i};--r:${r}"
            aria-label="Revelar carta ${esc(card.cat)}">
         <div class="card-inner">
           <div class="card-face card-back">
-            <span class="back-num">${esc(card.numeral)}</span>
-            <span class="back-art">${MINI_RING}<svg class="mini-gem" viewBox="0 0 200 300" aria-hidden="true"><use href="#gem"/></svg></span>
-            <span class="back-cat">${esc(card.cat)}</span>
+            <img src="${back}" alt="" loading="lazy">
+            <span class="holo"></span>
           </div>
           <div class="card-face card-front">
-            <span class="front-num">${esc(card.numeral)}</span>
-            <span class="front-arcana">${esc(card.arcana)}</span>
-            ${ORNAMENT}
-            <span class="front-cat">${esc(card.cat)}</span>
-            <p class="idea">${ideaHTML(value)}</p>
-            <button class="reroll" type="button" data-reroll="${i}" aria-label="Trocar ${esc(card.cat)}" title="Trocar esta carta">${REROLL_ICON}</button>
+            <img src="img/carta-${card.art}.webp" alt="">
+            <div class="front-panel">
+              <span class="front-arcana">${esc(card.arcana)}</span>
+              <span class="front-cat">${esc(card.cat)}</span>
+              <p class="idea">${ideaHTML(value)}</p>
+              <button class="reroll" type="button" data-reroll="${i}" aria-label="Trocar ${esc(card.cat)}" title="Trocar esta carta">${REROLL_ICON}</button>
+            </div>
+            <span class="holo"></span>
           </div>
         </div>
       </div>`;
@@ -75,7 +72,9 @@
   function startReading(mode) {
     const deck = DECKS[mode];
     state = { mode, values: deck.cards.map((c) => drawValue(c)), revealed: new Set() };
-    $("#reading-title").textContent = deck.title;
+    const title = $("#reading-title");
+    title.textContent = deck.title;
+    title.dataset.text = deck.title;
     $("#total").textContent = deck.cards.length;
     grid.innerHTML = deck.cards.map((c, i) => cardHTML(c, state.values[i], i)).join("");
     $("#done").hidden = true;
@@ -115,10 +114,8 @@
   // ---------- Interações ----------
   function sparkle(el) {
     for (let k = 0; k < 6; k++) {
-      const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      s.setAttribute("viewBox", "0 0 40 40");
-      s.setAttribute("class", "spark");
-      s.innerHTML = '<use href="#sparkle"/>';
+      const s = document.createElement("span");
+      s.className = "spark";
       const angle = (Math.PI * 2 * k) / 6 + Math.random() * 0.5;
       s.style.setProperty("--x", `${Math.cos(angle) * 70}px`);
       s.style.setProperty("--y", `${Math.sin(angle) * 70}px`);
@@ -171,7 +168,7 @@
     (c) => `<svg viewBox="0 0 24 22"><path fill="${c}" d="M12 21 C5 15 1 11 1 7 a5.5 5.5 0 0 1 11 -1 a5.5 5.5 0 0 1 11 1 c0 4 -4 8 -11 14z"/></svg>`,
     (c) => `<svg viewBox="0 0 40 60"><polygon fill="${c}" points="20,2 38,30 20,58 2,30"/></svg>`,
   ];
-  const CONFETTI_COLORS = ["#ff4fd1", "#ffd3f2", "#ff8fdc", "#ff8a2a", "#fff3fb"];
+  const CONFETTI_COLORS = ["#ff4fc8", "#ffd3f2", "#ffa6e6", "#ffd36b", "#fff5fb"];
 
   function confetti() {
     for (let k = 0; k < 40; k++) {
@@ -277,6 +274,34 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
   btnShare.addEventListener("click", share);
+
+  // ---------- Inclinação + brilho holográfico (mouse) ----------
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    document.querySelectorAll(".tilt").forEach((el) => {
+      el.addEventListener("pointermove", (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width;
+        const y = (e.clientY - r.top) / r.height;
+        el.classList.add("is-tilting");
+        el.style.setProperty("--ry", `${(x - 0.5) * 22}deg`);
+        el.style.setProperty("--rx", `${(0.5 - y) * 22}deg`);
+        el.style.setProperty("--mx", `${x * 100}%`);
+        el.style.setProperty("--my", `${y * 100}%`);
+      });
+      el.addEventListener("pointerleave", () => {
+        el.classList.remove("is-tilting");
+        ["--rx", "--ry", "--mx", "--my"].forEach((v) => el.style.removeProperty(v));
+      });
+    });
+  }
+
+  // Carrega as artes das cartas antes de a pessoa escolher
+  const preload = () => {
+    const arts = new Set(Object.values(DECKS).flatMap((d) => d.cards.map((c) => `img/carta-${c.art}.webp`)));
+    for (let k = 1; k <= 12; k++) arts.add(`img/verso-${k}.webp`);
+    arts.forEach((src) => { const im = new Image(); im.src = src; });
+  };
+  if ("requestIdleCallback" in window) requestIdleCallback(preload); else setTimeout(preload, 1200);
 
   route();
 })();

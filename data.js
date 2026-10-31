@@ -1,16 +1,21 @@
 // Cartas do Tarot Assombrado.
+// Cada carta usa uma ilustração (art -> img/carta-<art>.webp).
 // Para adicionar ideias, é só colocar mais um texto na lista "options" da carta.
 // "pick: 3" faz a carta sortear 3 itens diferentes (usado na personalidade).
+// "icon" só aparece no texto compartilhado no WhatsApp.
 
 window.DECKS = {
-  sim: {
-    title: "Criar um Sim",
-    short: "CAS",
-    icon: "🧛",
-    cards: [
+  "sim": {
+    "title": "Criar um Sim",
+    "short": "CAS",
+    "icon": "🧛",
+    "cards": [
       {
-        numeral: "0", arcana: "O Louco", icon: "🎭", cat: "Criatura",
-        options: [
+        "art": "bruxa",
+        "arcana": "A Bruxa",
+        "icon": "🎭",
+        "cat": "Criatura",
+        "options": [
           "Vampiro(a) aristocrata de 300 anos",
           "Bruxa(o) da floresta que coleciona cogumelos",
           "Lobisomem que de dia trabalha de contador(a)",
@@ -29,20 +34,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "XI", arcana: "A Justiça", icon: "⏳", cat: "Idade",
-        options: [
-          "Criança (bem sinistrinha)",
-          "Adolescente rebelde",
-          "Jovem adulto(a)",
-          "Adulto(a)",
-          "Idoso(a) ranzinza",
-          "Idoso(a) fofo(a)… só que não",
-          "Escolha livre: as cartas confiam em você"
-        ]
-      },
-      {
-        numeral: "XVII", arcana: "A Estrela", icon: "🎨", cat: "Paleta de cores",
-        options: [
+        "art": "estrela",
+        "arcana": "A Estrela",
+        "icon": "🎨",
+        "cat": "Paleta de cores",
+        "options": [
           "Roxo, verde-limão e preto",
           "Laranja abóbora e preto",
           "Só preto e branco",
@@ -56,21 +52,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "VIII", arcana: "A Força", icon: "💪", cat: "Corpo",
-        options: [
-          "Bem alto(a) e esguio(a)",
-          "Baixinho(a) e fofinho(a)",
-          "Musculoso(a) que nem lobisomem",
-          "Magrinho(a) estilo esqueleto",
-          "Corpo cheio de curvas",
-          "Ombros largos e postura de vilão",
-          "Corcunda de assistente de laboratório",
-          "Corpo médio, o terror é no estilo"
-        ]
-      },
-      {
-        numeral: "XIX", arcana: "O Sol", icon: "🧪", cat: "Pele",
-        options: [
+        "art": "sol",
+        "arcana": "O Sol",
+        "icon": "🧪",
+        "cat": "Pele",
+        "options": [
           "Pálida, quase cinza",
           "Verde estilo Frankenstein",
           "Azulada de quem saiu do lago",
@@ -84,8 +70,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "II", arcana: "A Sacerdotisa", icon: "💇", cat: "Cabelo",
-        options: [
+        "art": "sacerdotisa",
+        "arcana": "A Sacerdotisa",
+        "icon": "💇",
+        "cat": "Cabelo",
+        "options": [
           "Longo, preto e liso até a cintura",
           "Ruivo bagunçado de bruxa",
           "Branco prateado",
@@ -101,8 +90,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "XVIII", arcana: "A Lua", icon: "👁️", cat: "Olhos",
-        options: [
+        "art": "lua",
+        "arcana": "A Lua",
+        "icon": "👁️",
+        "cat": "Olhos",
+        "options": [
           "Vermelhos de vampiro",
           "Brancos, sem pupila",
           "Um de cada cor",
@@ -116,8 +108,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "IX", arcana: "O Eremita", icon: "👃", cat: "Nariz",
-        options: [
+        "art": "louco",
+        "arcana": "O Louco",
+        "icon": "👃",
+        "cat": "Nariz",
+        "options": [
           "De bruxa: longo e pontudo",
           "Arrebitadinho de boneca",
           "Fininho, quase de esqueleto",
@@ -129,8 +124,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "XV", arcana: "O Diabo", icon: "👄", cat: "Boca",
-        options: [
+        "art": "forca",
+        "arcana": "A Força",
+        "icon": "👄",
+        "cat": "Boca",
+        "options": [
           "Batom preto",
           "Sorriso costurado (maquiagem)",
           "Lábios roxos de frio",
@@ -142,8 +140,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "III", arcana: "A Imperatriz", icon: "💄", cat: "Maquiagem",
-        options: [
+        "art": "mago",
+        "arcana": "O Mago",
+        "icon": "💄",
+        "cat": "Maquiagem",
+        "options": [
           "Caveira estilo Catrina",
           "Olho esfumado preto bem pesado",
           "Lágrimas pretas escorrendo",
@@ -155,8 +156,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "XXI", arcana: "O Mundo", icon: "👗", cat: "Roupa",
-        options: [
+        "art": "mundo",
+        "arcana": "O Mundo",
+        "icon": "👗",
+        "cat": "Roupa",
+        "options": [
           "Vestido ou terno vitoriano preto",
           "Capa de vampiro com gola alta",
           "Bruxa(o) completo, chapéu pontudo",
@@ -172,34 +176,44 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "X", arcana: "A Roda da Fortuna", icon: "🎩", cat: "Acessório",
-        options: [
-          "Chapéu de bruxa",
-          "Colar com pingente de morcego",
-          "Óculos redondos escuros",
-          "Coroa de flores mortas",
-          "Tiara de chifres",
-          "Luvas de renda pretas",
-          "Brincos de aranha",
-          "Um anel em cada dedo",
-          "Tapa-olho",
-          "Orelhinhas de gato",
-          "Véu preto"
+        "art": "justica",
+        "arcana": "A Justiça",
+        "icon": "🧠",
+        "cat": "Personalidade",
+        "pick": 3,
+        "options": [
+          "Malvado",
+          "Maldoso",
+          "Maluco",
+          "Solitário",
+          "Esnobe",
+          "Melancólico",
+          "Esquentado",
+          "Desastrado",
+          "Gênio",
+          "Romântico",
+          "Criativo",
+          "Glutão",
+          "Desleixado",
+          "Perfeccionista",
+          "Ambicioso",
+          "Detesta Crianças",
+          "Paranoico",
+          "Preguiçoso",
+          "Alegre",
+          "Gourmet",
+          "Rato de Biblioteca",
+          "Amante de Gatos",
+          "Ativo",
+          "Mesquinho"
         ]
       },
       {
-        numeral: "VI", arcana: "Os Enamorados", icon: "🧠", cat: "Personalidade", pick: 3,
-        options: [
-          "Malvado", "Maldoso", "Maluco", "Solitário", "Esnobe",
-          "Melancólico", "Esquentado", "Desastrado", "Gênio", "Romântico",
-          "Criativo", "Glutão", "Desleixado", "Perfeccionista", "Ambicioso",
-          "Detesta Crianças", "Paranoico", "Preguiçoso", "Alegre", "Gourmet",
-          "Rato de Biblioteca", "Amante de Gatos", "Ativo", "Mesquinho"
-        ]
-      },
-      {
-        numeral: "XX", arcana: "O Julgamento", icon: "⭐", cat: "Aspiração",
-        options: [
+        "art": "roda",
+        "arcana": "A Roda da Fortuna",
+        "icon": "⭐",
+        "cat": "Aspiração",
+        "options": [
           "Dominar todos os poderes de vampiro",
           "Virar gênio do mal",
           "Ser o terror das travessuras",
@@ -214,8 +228,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "XIII", arcana: "A Morte", icon: "🕯️", cat: "Segredo sombrio",
-        options: [
+        "art": "morte",
+        "arcana": "A Morte",
+        "icon": "🕯️",
+        "cat": "Segredo sombrio",
+        "options": [
           "Na verdade tem 400 anos",
           "Tem medo de abóboras",
           "Conversa com fantasmas toda noite",
@@ -231,15 +248,17 @@ window.DECKS = {
       }
     ]
   },
-
-  casa: {
-    title: "Construção",
-    short: "construção",
-    icon: "🏚️",
-    cards: [
+  "casa": {
+    "title": "Construção",
+    "short": "construção",
+    "icon": "🏚️",
+    "cards": [
       {
-        numeral: "0", arcana: "O Louco", icon: "🏚️", cat: "Estilo da casa",
-        options: [
+        "art": "lua",
+        "arcana": "A Lua",
+        "icon": "🏚️",
+        "cat": "Estilo da casa",
+        "options": [
           "Mansão vitoriana mal-assombrada",
           "Cabana de bruxa no meio da floresta",
           "Castelo de vampiro",
@@ -255,8 +274,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "XVII", arcana: "A Estrela", icon: "🎨", cat: "Paleta de cores",
-        options: [
+        "art": "mundo",
+        "arcana": "O Mundo",
+        "icon": "🎨",
+        "cat": "Paleta de cores",
+        "options": [
           "Roxo, verde-limão e preto",
           "Laranja abóbora e preto",
           "Só preto e branco",
@@ -270,8 +292,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "I", arcana: "O Mago", icon: "📐", cat: "Desafio do lote",
-        options: [
+        "art": "justica",
+        "arcana": "A Justiça",
+        "icon": "📐",
+        "cat": "Desafio do lote",
+        "options": [
           "Lote 20x20, dinheiro infinito",
           "Lote 30x20, no máximo 2 andares",
           "Lote 20x15: casa compacta",
@@ -285,8 +310,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "VII", arcana: "O Carro", icon: "🚪", cat: "Fachada e entrada",
-        options: [
+        "art": "louco",
+        "arcana": "O Louco",
+        "icon": "🚪",
+        "cat": "Fachada e entrada",
+        "options": [
           "Portão de ferro com gárgulas",
           "Caminho de abóboras iluminadas",
           "Varanda com cadeira de balanço",
@@ -298,8 +326,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "IV", arcana: "O Imperador", icon: "🛋️", cat: "Sala de estar",
-        options: [
+        "art": "sacerdotisa",
+        "arcana": "A Sacerdotisa",
+        "icon": "🛋️",
+        "cat": "Sala de estar",
+        "options": [
           "Lareira enorme e retrato de antepassado",
           "Sofá de veludo roxo e caveiras",
           "Biblioteca de livros de feitiço",
@@ -311,8 +342,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "XIV", arcana: "A Temperança", icon: "🍳", cat: "Cozinha",
-        options: [
+        "art": "bruxa",
+        "arcana": "A Bruxa",
+        "icon": "🍳",
+        "cat": "Cozinha",
+        "options": [
           "Cozinha de bruxa com caldeirão",
           "Toda preta com detalhes dourados",
           "Laboratório: potes, tubos e frascos",
@@ -324,8 +358,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "XVIII", arcana: "A Lua", icon: "🛏️", cat: "Quarto",
-        options: [
+        "art": "forca",
+        "arcana": "A Força",
+        "icon": "🛏️",
+        "cat": "Quarto",
+        "options": [
           "Cama com dossel preto",
           "Caixão no lugar da cama",
           "Quarto de bonecas antigas",
@@ -337,8 +374,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "XII", arcana: "O Enforcado", icon: "🛁", cat: "Banheiro",
-        options: [
+        "art": "estrela",
+        "arcana": "A Estrela",
+        "icon": "🛁",
+        "cat": "Banheiro",
+        "options": [
           "Banheira com pés de garra",
           "Tudo em verde gosma",
           "Mármore preto e velas",
@@ -350,8 +390,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "V", arcana: "O Hierofante", icon: "🍽️", cat: "Sala de jantar",
-        options: [
+        "art": "roda",
+        "arcana": "A Roda da Fortuna",
+        "icon": "🍽️",
+        "cat": "Sala de jantar",
+        "options": [
           "Mesa longa para 12 convidados sinistros",
           "Banquete de Halloween servido",
           "Lustre gigante de velas",
@@ -363,8 +406,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "VIII", arcana: "A Força", icon: "🌳", cat: "Quintal",
-        options: [
+        "art": "sol",
+        "arcana": "O Sol",
+        "icon": "🌳",
+        "cat": "Quintal",
+        "options": [
           "Horta de abóboras gigantes",
           "Cemitério da família",
           "Labirinto de cerca viva",
@@ -376,8 +422,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "II", arcana: "A Sacerdotisa", icon: "🗝️", cat: "Cômodo secreto",
-        options: [
+        "art": "mago",
+        "arcana": "O Mago",
+        "icon": "🗝️",
+        "cat": "Cômodo secreto",
+        "options": [
           "Laboratório de cientista maluco",
           "Calabouço no porão",
           "Sala de poções atrás da estante",
@@ -389,8 +438,11 @@ window.DECKS = {
         ]
       },
       {
-        numeral: "XIII", arcana: "A Morte", icon: "👻", cat: "Toque assombrado",
-        options: [
+        "art": "morte",
+        "arcana": "A Morte",
+        "icon": "👻",
+        "cat": "Toque assombrado",
+        "options": [
           "Um fantasma mora na casa",
           "Uma abóbora em cada cômodo",
           "Corvos e gatos pretos espalhados",
