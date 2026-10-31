@@ -30,15 +30,18 @@
 
   // ---------- Desenho das cartas ----------
   const EMBLEM = `
-    <svg class="back-emblem" viewBox="0 0 100 100" aria-hidden="true">
-      <circle cx="50" cy="50" r="44" fill="none" stroke="#c8f250" stroke-width="2.5" stroke-dasharray="3 6" stroke-linecap="round"/>
-      <path d="M62 14 a20 20 0 1 0 0 30 a15 15 0 1 1 0 -30z" fill="#ffa630" stroke="#1a0838" stroke-width="2.5" transform="translate(-12 -2)"/>
-      <path d="M16 62 Q50 34 84 62 Q50 90 16 62Z" fill="#fff7ea" stroke="#1a0838" stroke-width="3" stroke-linejoin="round"/>
-      <circle cx="50" cy="62" r="12" fill="#7a45e0" stroke="#1a0838" stroke-width="3"/>
-      <circle cx="50" cy="62" r="5" fill="#1a0838"/>
-      <circle cx="46" cy="58" r="2.2" fill="#fff"/>
-      <path d="M78 24 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#fff"/>
-      <path d="M22 30 l1.5 4 4 1.5 -4 1.5 -1.5 4 -1.5 -4 -4 -1.5 4 -1.5z" fill="#c8f250"/>
+    <svg class="back-emblem" viewBox="0 0 100 130" aria-hidden="true">
+      <polygon points="50,4 94,65 50,126 6,65" fill="#e05cc8"/>
+      <polygon points="50,4 94,65 50,65" fill="#b03cc0"/>
+      <polygon points="6,65 50,65 50,126" fill="#5a1475" opacity=".6"/>
+      <polygon points="50,4 6,65 50,65" fill="#fff" opacity=".28"/>
+      <polygon points="50,4 94,65 50,126 6,65" fill="none" stroke="#ffe0f6" stroke-width="3.5" stroke-linejoin="round"/>
+      <g fill="rgba(255,224,246,.3)" stroke="#ffe0f6" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+        <path d="M37 52 L34 37 L43 45 L50 33 L57 45 L66 37 L63 52 Z"/>
+      </g>
+      <path d="M50 96 C44 91 41 88 41 85 a4.5 4.5 0 0 1 9 -1 a4.5 4.5 0 0 1 9 1 c0 3 -3 6 -9 11z" fill="#ffe0f6"/>
+      <path d="M86 18 l2 5 5 2 -5 2 -2 5 -2 -5 -5 -2 5 -2z" fill="#ffe0f6"/>
+      <path d="M14 104 l1.6 4 4 1.6 -4 1.6 -1.6 4 -1.6 -4 -4 -1.6 4 -1.6z" fill="#ffe0f6"/>
     </svg>`;
 
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -122,7 +125,7 @@
 
   // ---------- Interações ----------
   function sparkle(el) {
-    const icons = ["✨", "⭐", "🦇", "💜"];
+    const icons = ["✨", "💖", "🦇", "💜"];
     for (let k = 0; k < 6; k++) {
       const s = document.createElement("span");
       s.className = "spark";
@@ -177,7 +180,7 @@
   }
 
   function confetti() {
-    const items = ["🎃", "👻", "🦇", "🍬", "⭐", "🕸️", "💜", "🔮"];
+    const items = ["🎃", "👻", "🦇", "💖", "✨", "🕯️", "💜", "🔮"];
     for (let k = 0; k < 36; k++) {
       const c = document.createElement("span");
       c.className = "confetti";
@@ -281,16 +284,36 @@
 
   // ---------- Céu ----------
   const starsBox = $("#stars");
-  for (let k = 0; k < 34; k++) {
+  const SKY_COLORS = ["#ffffff", "#ffd9f3", "#ff9ee0"];
+  for (let k = 0; k < 40; k++) {
     const s = document.createElement("span");
-    const dot = k % 3 === 0;
-    s.className = dot ? "star is-dot" : "star";
+    const kind = k % 5 === 0 ? "heart" : k % 4 === 0 ? "dot" : "star";
+    s.className = kind === "star" ? "star" : `star is-${kind}`;
+    if (kind === "heart") s.textContent = "♡";
     s.style.left = `${Math.random() * 100}%`;
     s.style.top = `${Math.random() * 100}%`;
-    s.style.setProperty("--s", `${dot ? 3 + rand(4) : 10 + rand(16)}px`);
+    s.style.setProperty("--c", SKY_COLORS[rand(SKY_COLORS.length)]);
+    s.style.setProperty("--s", `${kind === "dot" ? 3 + rand(3) : kind === "heart" ? 14 + rand(12) : 8 + rand(14)}px`);
     s.style.setProperty("--d", `${2 + Math.random() * 3}s`);
     s.style.setProperty("--delay", `${-Math.random() * 4}s`);
     starsBox.appendChild(s);
+  }
+
+  // Varal: abóboras e fantasminhas pendurados acompanhando o fio
+  const garland = $("#garland");
+  const BULBS = 12;
+  for (let k = 0; k < BULBS; k++) {
+    const x = ((k + 0.5) / BULBS) * 100;
+    const phase = ((x / 100) * 4) % 1; // 4 curvas no fio
+    const sag = Math.sin(phase * Math.PI);
+    const b = document.createElement("span");
+    const ghost = k % 2 === 1;
+    b.className = `bulb ${ghost ? "is-ghost" : "is-pumpkin"}`;
+    b.textContent = ghost ? "👻" : "🎃";
+    b.style.setProperty("--x", `${x}%`);
+    b.style.setProperty("--y", `${10 + sag * 30}px`);
+    b.style.setProperty("--delay", `${-Math.random() * 3}s`);
+    garland.appendChild(b);
   }
 
   function releaseBat() {
