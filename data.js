@@ -65,8 +65,9 @@ window.DECKS = {
           "Tatuagens de teia de aranha",
           "Roxa (modo alienígena)",
           "Bronzeada: vampiro(a) que pegou sol",
-          "Com detalhes de escamas",
-          "Normal: o terror é por dentro"
+          "Pintinhas e marcas de nascença",
+          "Normal: o terror é por dentro",
+          "Detalhes de escamas (Ilhas Tropicais)"
         ]
       },
       {
@@ -183,8 +184,7 @@ window.DECKS = {
         "pick": 3,
         "options": [
           "Malvado",
-          "Maldoso",
-          "Maluco",
+          "Mesquinho",
           "Solitário",
           "Esnobe",
           "Melancólico",
@@ -198,14 +198,39 @@ window.DECKS = {
           "Perfeccionista",
           "Ambicioso",
           "Detesta Crianças",
-          "Paranoico",
           "Preguiçoso",
           "Alegre",
           "Gourmet",
           "Rato de Biblioteca",
-          "Amante de Gatos",
           "Ativo",
-          "Mesquinho"
+          "Materialista",
+          "Bom",
+          "Asseado",
+          "Amante da Música",
+          "Paranoico (StrangerVille)",
+          "Amante de Gatos (Gatos e Cães)"
+        ],
+        "conflicts": [
+          [
+            "Ativo",
+            "Preguiçoso"
+          ],
+          [
+            "Alegre",
+            "Melancólico"
+          ],
+          [
+            "Malvado",
+            "Bom"
+          ],
+          [
+            "Mesquinho",
+            "Bom"
+          ],
+          [
+            "Desleixado",
+            "Asseado"
+          ]
         ]
       },
       {
@@ -214,7 +239,7 @@ window.DECKS = {
         "icon": "⭐",
         "cat": "Aspiração",
         "options": [
-          "Dominar todos os poderes de vampiro",
+          "Escrever best-sellers de terror",
           "Virar gênio do mal",
           "Ser o terror das travessuras",
           "Ficar rico(a) a qualquer custo",
@@ -224,7 +249,8 @@ window.DECKS = {
           "Pintar só quadros assombrados",
           "Viver isolado(a) na floresta",
           "Ter uma família enorme e esquisita",
-          "Cientista maluco(a)"
+          "Cientista maluco(a)",
+          "Dominar os poderes de vampiro (Vampiros)"
         ]
       },
       {
@@ -243,7 +269,7 @@ window.DECKS = {
           "Não aparece no espelho",
           "Nunca dorme. Nunca.",
           "Foi demitido(a) pela Morte",
-          "Guarda um esqueleto no armário. De verdade."
+          "Esqueleto no armário. De verdade."
         ]
       }
     ]
@@ -268,7 +294,7 @@ window.DECKS = {
           "Hospital abandonado reformado",
           "Casa inspirada em uma abóbora",
           "Mansão de família rica e esquisita",
-          "Casa flutuante no pântano",
+          "Casa sobre palafitas no pântano",
           "Casinha fofa-assustadora",
           "Igreja antiga que virou casa"
         ]
@@ -304,7 +330,7 @@ window.DECKS = {
           "Orçamento máximo de §50.000",
           "Precisa ter uma torre",
           "Tudo térreo, sem escadas",
-          "Lote 40x30 com cemitério",
+          "Lote 40x30 com área de cemitério",
           "Livre! Você escolhe",
           "Pelo menos 1 cômodo secreto"
         ]
@@ -364,13 +390,14 @@ window.DECKS = {
         "cat": "Quarto",
         "options": [
           "Cama com dossel preto",
-          "Caixão no lugar da cama",
+          "Cama de ferro gótica",
           "Quarto de bonecas antigas",
           "Parede inteira de espelhos",
           "Teias de aranha e luz de vela",
           "Decoração lunar e estrelas",
           "Quarto de bruxa: plantas e cristais",
-          "Quarto infantil assombrado"
+          "Quarto infantil assombrado",
+          "Caixão no lugar da cama (Vampiros)"
         ]
       },
       {
@@ -395,7 +422,7 @@ window.DECKS = {
         "icon": "🍽️",
         "cat": "Sala de jantar",
         "options": [
-          "Mesa longa para 12 convidados sinistros",
+          "Mesa para 12 convidados sinistros",
           "Banquete de Halloween servido",
           "Lustre gigante de velas",
           "Toalha rasgada e pratos antigos",
@@ -414,11 +441,12 @@ window.DECKS = {
           "Horta de abóboras gigantes",
           "Cemitério da família",
           "Labirinto de cerca viva",
-          "Piscina de água verde",
+          "Piscina com luz verde",
           "Fogueira com bancos de tronco",
           "Estufa de plantas carnívoras",
-          "Casa na árvore assustadora",
-          "Lago com névoa e salgueiros"
+          "Casinha de madeira no fundo do quintal",
+          "Lago com névoa e salgueiros",
+          "Casa na árvore assustadora"
         ]
       },
       {
@@ -451,7 +479,7 @@ window.DECKS = {
           "Pelo menos 1 caixão escondido",
           "Teias em todos os cômodos",
           "Escada que leva a lugar nenhum",
-          "Casa construída sobre um cemitério",
+          "Casa erguida num cemitério",
           "Um retrato que encara todo mundo"
         ]
       }

@@ -9,7 +9,7 @@
 
   <meta property="og:title" content="Tarot Assombrado · Migas Sims">
   <meta property="og:description" content="Deixe as cartas decidirem seu desafio de Halloween no The Sims 4: construção ou criar um Sim.">
-  <meta property="og:image" content="https://thesimpals.github.io/halloween/og.png">
+  <meta property="og:image" content="https://thesimpals.github.io/halloween/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:type" content="website">
@@ -18,70 +18,62 @@
   <link rel="apple-touch-icon" href="icone-180.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Cinzel:wght@600;700&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Shantell+Sans:ital,wght,BNCE,INFM@0,400..800,-100..100,0..100&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=18">
 </head>
-<body>
+<body data-screen="intro">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <filter id="rough" x="-5%" y="-10%" width="110%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="3" result="wobble"/>
+      <feDisplacementMap in="SourceGraphic" in2="wobble" scale="3"/>
+    </filter>
+  </svg>
   <!-- Cenário fixo: céu, lua, casa ao longe, teias e luz de vela -->
   <div class="nebula" aria-hidden="true">
-    <span class="mist m1"></span>
-    <span class="mist m2"></span>
-    <span class="mist m3"></span>
   </div>
   <div class="backdrop" aria-hidden="true">
     <div class="sky-group">
       <span class="twk t1"></span><span class="twk t2"></span><span class="twk t3"></span>
       <span class="twk t4"></span><span class="twk t5"></span><span class="twk t6"></span>
       <img class="moon" src="img/lua.webp?v=4" alt="">
-      <img class="bat b1" src="img/morcego-1.webp?v=4" alt="">
-      <img class="bat b2" src="img/morcego-2.webp?v=4" alt="">
-      <img class="bat b3" src="img/morcego-1.webp?v=4" alt="">
-      <img class="bat b4" src="img/morcego-2.webp?v=4" alt="">
-      <img class="bat b5" src="img/morcego-1.webp?v=4" alt="">
     </div>
     <img class="house" src="img/casa.webp?v=3" alt="">
-    <img class="web web-tl" src="img/teia-1.webp?v=4" alt="">
-    <img class="web web-tr" src="img/teia-4.webp?v=4" alt="">
     <span class="warm"></span>
   </div>
   <div class="grain" aria-hidden="true"></div>
 
-  <header class="topbar">
-    <a class="wordmark" href="./" data-home>
-      <svg class="logo-gem" viewBox="0 0 100 150" aria-hidden="true">
-        <polygon points="50,4 92,62 50,146 8,62" fill="#c968c6"/>
-        <polygon points="50,4 8,62 50,62" fill="#ffd2f2"/>
-        <polygon points="50,4 92,62 50,62" fill="#ee9ae0"/>
-        <polygon points="50,62 92,62 50,146" fill="#a23fae"/>
-        <polygon points="50,4 92,62 50,146 8,62" fill="none" stroke="#2a0838" stroke-width="5" stroke-linejoin="round"/>
-      </svg>
-      <svg class="logo-crown" viewBox="0 0 60 34" aria-hidden="true">
-        <path d="M10 30 L6 10 L20 20 L30 4 L40 20 L54 10 L50 30 Z" fill="#ffd2f2" stroke="#2a0838" stroke-width="4" stroke-linejoin="round"/>
-      </svg>
-      <span class="logo-text"><span class="candy" data-text="Migas">Migas</span><span class="candy" data-text="Sims">Sims</span></span>
-    </a>
-    <span class="topbar-date">31 · 10</span>
-  </header>
+  <nav class="fnav" aria-label="Brincadeiras">
+    <a class="fnav-logo" href="./" data-home aria-label="Migas Sims — início"><img src="img/logo-migas.webp?v=1" alt="" width="34" height="34"></a>
+    <a href="./" data-home data-nav=""><span class="g">✦&#xFE0E;</span>Tarot</a>
+    <a href="#bingo" data-nav="bingo"><span class="g">✷&#xFE0E;</span>Bingo</a>
+    <a href="#horoscopo" data-nav="horoscopo"><span class="g">☾&#xFE0E;</span><span class="lbl-long">Horóscopo</span><span class="lbl-short">Signos</span></a>
+    <a href="#morte" data-nav="morte"><span class="g">☠&#xFE0E;</span>Roleta</a>
+    <a href="#legado" data-nav="legado"><span class="g">♛&#xFE0E;</span>Legado</a>
+    <a href="#familia" data-nav="familia"><span class="g">⚘&#xFE0E;</span>Família</a>
+  </nav>
 
   <main>
     <!-- Tela inicial -->
     <section id="intro" class="screen intro" aria-labelledby="intro-title">
       <div class="intro-copy">
-        <p class="eyebrow">Especial de Halloween</p>
+        <div class="brand-row">
+          <img class="hero-logo" src="img/logo-migas.webp?v=1" alt="Migas Sims" width="120" height="120">
+          <p class="eyebrow">Migas Sims apresenta<br>Especial de Halloween</p>
+        </div>
         <h1 id="intro-title">
-          <span class="candy candy-1" data-text="Tarot">Tarot</span>
-          <span class="candy candy-2" data-text="Assombrado">Assombrado</span>
+          <span class="candy candy-1 rough" data-text="Tarot">Tarot</span>
+          <span class="candy candy-2 rough" data-text="Assombrado">Assombrado</span>
         </h1>
         <p class="lede">Escolha uma carta. O resto do seu desafio no The Sims 4 fica por conta do destino.</p>
       </div>
 
       <div class="deck">
-        <div class="fan" aria-hidden="true">
-          <img src="img/verso-6.webp?v=3" alt="">
-          <img src="img/verso-2.webp?v=3" alt="">
-          <img src="img/verso-7.webp?v=3" alt="">
-        </div>
         <div class="pick" role="group" aria-label="Escolha o desafio">
+          <div class="fan" aria-hidden="true">
+            <img src="img/verso-6.webp?v=8" alt="">
+            <img src="img/verso-2.webp?v=8" alt="">
+            <img src="img/verso-7.webp?v=8" alt="">
+          </div>
           <button class="pick-card tilt" type="button" data-mode="sim">
             <img src="img/carta-bruxa.webp?v=3" alt="">
             <span class="plate">
@@ -102,19 +94,6 @@
         <p class="pick-hint">Toque em uma carta</p>
       </div>
 
-      <div class="props" aria-hidden="true">
-        <svg class="ground" viewBox="0 0 1200 90" preserveAspectRatio="none">
-          <path d="M0 46 C120 24 230 30 340 40 S560 58 700 42 S960 22 1080 36 S1170 44 1200 40 V90 H0 Z" fill="#170622"/>
-          <path d="M0 46 C120 24 230 30 340 40 S560 58 700 42 S960 22 1080 36 S1170 44 1200 40" fill="none" stroke="rgba(255,211,242,.12)" stroke-width="2"/>
-        </svg>
-        <div class="candles">
-          <img class="candle c1" src="img/vela-2.webp?v=4" alt="">
-          <img class="candle c2" src="img/vela-8.webp?v=4" alt="">
-          <img class="candle c3" src="img/vela-5.webp?v=4" alt="">
-        </div>
-        <img class="cat" src="img/gato.webp?v=4" alt="">
-        <img class="pumpkin" src="img/abobora.webp?v=4" alt="">
-      </div>
     </section>
 
     <!-- Tiragem -->
@@ -123,8 +102,8 @@
       <div class="reading-head">
         <div>
           <p class="eyebrow">Sua tiragem</p>
-          <h2 id="reading-title" class="reading-title candy" data-text=""></h2>
-          <p class="hint">Toque nas cartas para revelar.</p>
+          <h2 id="reading-title" class="reading-title candy rough" data-text=""></h2>
+          <p class="hint" id="hint">Toque nas cartas para revelar.</p>
         </div>
         <p class="counter" aria-live="polite"><span id="count">0</span><span class="counter-total">/<span id="total">0</span></span></p>
       </div>
@@ -146,13 +125,36 @@
         <button class="btn btn-light" type="button" id="btn-share">Compartilhar</button>
       </div>
     </section>
+    <!-- Brincadeiras extras -->
+    <section id="game" class="screen game" aria-labelledby="game-title" hidden>
+      <button class="back" type="button" data-home>← Voltar</button>
+      <p class="eyebrow" id="game-eyebrow"></p>
+      <h2 id="game-title" class="reading-title candy rough" data-text=""></h2>
+      <div class="rule"><span style="width:100%"></span></div>
+      <div class="game-body" id="game-body"></div>
+      <div class="actions">
+        <button class="btn btn-ghost" type="button" id="game-again">De novo</button>
+        <button class="btn btn-light" type="button" id="game-share">Compartilhar</button>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">Migas Sims · Halloween 2026</footer>
 
+  <a class="credit" href="https://dafnymedeiross-prog.github.io/portfolio/" target="_blank" rel="noopener" aria-label="Criado por mim, ver portfólio">
+    <img class="credit-logo" src="creditos/logo.webp?v=1" alt="" width="48" height="48">
+    <img class="credit-sign" src="creditos/assinatura.svg?v=2" alt="Assinatura da autora" width="80" height="44">
+  </a>
+
+  <div class="zoom" id="zoom" hidden>
+    <button class="zoom-close" type="button" aria-label="Fechar">×</button>
+    <div class="zoom-card" id="zoom-card"></div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="data.js?v=3"></script>
-  <script src="app.js?v=3"></script>
+  <script src="data.js?v=8"></script>
+  <script src="games.js?v=6"></script>
+  <script src="app.js?v=12"></script>
 </body>
 </html>

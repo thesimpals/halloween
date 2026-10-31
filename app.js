@@ -22,7 +22,16 @@
     return a;
   };
   function drawValue(card, previous) {
-    if (card.pick) return shuffle(card.options).slice(0, card.pick);
+    if (card.pick) {
+      // sorteia traços sem pares que o jogo não deixa juntar (ex.: Ativo + Preguiçoso)
+      const clash = (a, b) => (card.conflicts || []).some(([x, y]) => (a === x && b === y) || (a === y && b === x));
+      const out = [];
+      for (const t of shuffle(card.options)) {
+        if (out.length === card.pick) break;
+        if (!out.some((o) => clash(o, t))) out.push(t);
+      }
+      return out;
+    }
     const pool = card.options.filter((o) => o !== previous);
     return pool[rand(pool.length)];
   }
@@ -45,7 +54,7 @@
 
   function cardHTML(card, value, i) {
     const r = (Math.random() * 24 - 12).toFixed(1);
-    const back = `img/verso-${(i % 12) + 1}.webp?v=3`;
+    const back = `img/verso-${(i % 12) + 1}.webp?v=8`;
     return `
       <div class="card is-dealing" role="button" tabindex="0" data-i="${i}" style="--i:${i};--r:${r}"
            aria-label="Revelar carta ${esc(card.cat)}">
@@ -78,22 +87,47 @@
     $("#total").textContent = deck.cards.length;
     grid.innerHTML = deck.cards.map((c, i) => cardHTML(c, state.values[i], i)).join("");
     $("#done").hidden = true;
+    $("#hint").textContent = "Toque nas cartas para revelar.";
     btnReveal.hidden = false;
     btnShare.classList.remove("is-hot");
     updateProgress();
   }
 
+  const GAMES = window.GAMES || {};
+  const gameSec = $("#game");
+  let gameMode = null;
+  let gameShare = null;
+  const gameApi = {
+    body: $("#game-body"),
+    celebrate: (small) => (small ? sparkle($("#game-title")) : confetti()),
+    setShare: (text) => { gameShare = text; },
+  };
+  function startGame(mode) {
+    const g = GAMES[mode];
+    gameMode = mode;
+    $("#game-eyebrow").textContent = g.eyebrow;
+    const t = $("#game-title");
+    t.textContent = g.title;
+    t.dataset.text = g.title;
+    $("#game-again").textContent = g.againLabel;
+    g.render(gameApi);
+  }
+
   function route() {
     const mode = location.hash.replace("#", "");
-    if (DECKS[mode]) {
-      intro.hidden = true;
-      reading.hidden = false;
-      startReading(mode);
-    } else {
-      reading.hidden = true;
-      intro.hidden = false;
-      state = null;
-    }
+    const screen = DECKS[mode] ? "reading" : GAMES[mode] ? "game" : "intro";
+    document.body.dataset.screen = screen;
+    intro.hidden = screen !== "intro";
+    reading.hidden = screen !== "reading";
+    gameSec.hidden = screen !== "game";
+    if (screen !== "reading") state = null;
+    if (screen === "reading") startReading(mode);
+    document.body.dataset.game = screen === "game" ? mode : "";
+    if (screen === "game") startGame(mode); else gameMode = null;
+    const navKey = screen === "game" ? mode : "";
+    document.querySelectorAll(".fnav [data-nav]").forEach((l) => {
+      if (l.dataset.nav === navKey) l.setAttribute("aria-current", "page"); else l.removeAttribute("aria-current");
+    });
     window.scrollTo({ top: 0 });
   }
 
@@ -129,12 +163,14 @@
     const el = grid.querySelector(`.card[data-i="${i}"]`);
     state.revealed.add(i);
     el.classList.remove("is-dealing");
-    el.classList.add("is-flipped");
+    el.classList.add("is-turning");
+    setTimeout(() => el.classList.add("is-flipped"), 280);
+    setTimeout(() => el.classList.remove("is-turning"), 600);
     el.setAttribute("aria-label", `${DECKS[state.mode].cards[i].cat}: revelada`);
-    setTimeout(() => { el.classList.add("pop"); sparkle(el); }, 300);
-    setTimeout(() => el.classList.remove("pop"), 820);
+    setTimeout(() => sparkle(el), 420);
     if (navigator.vibrate) navigator.vibrate(12);
     updateProgress();
+    if (state.revealed.size === 1) $("#hint").textContent = "Toque numa carta revelada para ampliar. Não tem o pacote? Use o 🔄 para sortear de novo.";
     if (state.revealed.size === DECKS[state.mode].cards.length) finish();
   }
 
@@ -214,7 +250,10 @@
       toast("Revele pelo menos uma carta primeiro");
       return;
     }
-    const text = shareText();
+    shareAny(shareText());
+  }
+
+  async function shareAny(text) {
     const isTouch = window.matchMedia("(pointer: coarse)").matches;
     if (isTouch && navigator.share) {
       try { await navigator.share({ text }); } catch (_) { /* cancelado */ }
@@ -255,8 +294,21 @@
       return;
     }
     const card = e.target.closest(".card");
-    if (card) flip(Number(card.dataset.i));
+    if (!card) return;
+    const i = Number(card.dataset.i);
+    if (state.revealed.has(i)) openZoom(i); else flip(i);
   });
+
+  // ---------- Carta ampliada (para ler com calma no celular) ----------
+  const zoom = $("#zoom");
+  function openZoom(i) {
+    const front = grid.querySelector(`.card[data-i="${i}"] .card-front`);
+    $("#zoom-card").replaceChildren(front.cloneNode(true));
+    zoom.hidden = false;
+  }
+  function closeZoom() { zoom.hidden = true; }
+  zoom.addEventListener("click", closeZoom);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeZoom(); });
   grid.addEventListener("animationend", (e) => {
     if (e.animationName === "deal") e.target.classList.remove("is-dealing");
   });
@@ -274,6 +326,16 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
   btnShare.addEventListener("click", share);
+  $("#game-again").addEventListener("click", () => {
+    if (!GAMES[gameMode]) return;
+    GAMES[gameMode].again();
+    GAMES[gameMode].render(gameApi);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  $("#game-share").addEventListener("click", () => {
+    if (!gameShare) { toast("Faça a sua jogada primeiro"); return; }
+    shareAny(`${gameShare}\n\nJogue também: ${SITE_URL}`);
+  });
 
   // ---------- Inclinação + brilho holográfico (mouse) ----------
   if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
@@ -298,7 +360,7 @@
   // Carrega as artes das cartas antes de a pessoa escolher
   const preload = () => {
     const arts = new Set(Object.values(DECKS).flatMap((d) => d.cards.map((c) => `img/carta-${c.art}.webp?v=3`)));
-    for (let k = 1; k <= 12; k++) arts.add(`img/verso-${k}.webp?v=3`);
+    for (let k = 1; k <= 12; k++) arts.add(`img/verso-${k}.webp?v=8`);
     arts.forEach((src) => { const im = new Image(); im.src = src; });
   };
   if ("requestIdleCallback" in window) requestIdleCallback(preload); else setTimeout(preload, 1200);
