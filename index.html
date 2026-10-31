@@ -19,7 +19,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Cinzel:wght@600;700&family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
   <!-- Cenário fixo: céu, lua, casa ao longe, teias e luz de vela -->
@@ -29,20 +29,36 @@
     <span class="mist m3"></span>
   </div>
   <div class="backdrop" aria-hidden="true">
-    <img class="moon" src="img/lua.webp?v=3" alt="">
-    <img class="bat bat-a" src="img/morcego-1.webp?v=3" alt="">
-    <img class="bat bat-b" src="img/morcego-2.webp?v=3" alt="">
+    <div class="sky-group">
+      <span class="twk t1"></span><span class="twk t2"></span><span class="twk t3"></span>
+      <span class="twk t4"></span><span class="twk t5"></span><span class="twk t6"></span>
+      <img class="moon" src="img/lua.webp?v=4" alt="">
+      <img class="bat b1" src="img/morcego-1.webp?v=4" alt="">
+      <img class="bat b2" src="img/morcego-2.webp?v=4" alt="">
+      <img class="bat b3" src="img/morcego-1.webp?v=4" alt="">
+      <img class="bat b4" src="img/morcego-2.webp?v=4" alt="">
+      <img class="bat b5" src="img/morcego-1.webp?v=4" alt="">
+    </div>
     <img class="house" src="img/casa.webp?v=3" alt="">
-    <img class="web web-tl" src="img/teia-1.webp?v=3" alt="">
-    <img class="web web-tr" src="img/teia-4.webp?v=3" alt="">
+    <img class="web web-tl" src="img/teia-1.webp?v=4" alt="">
+    <img class="web web-tr" src="img/teia-4.webp?v=4" alt="">
     <span class="warm"></span>
   </div>
   <div class="grain" aria-hidden="true"></div>
 
   <header class="topbar">
     <a class="wordmark" href="./" data-home>
-      <img src="icone-limpo.svg" alt="" width="34" height="34">
-      Migas Sims
+      <svg class="logo-gem" viewBox="0 0 100 150" aria-hidden="true">
+        <polygon points="50,4 92,62 50,146 8,62" fill="#c968c6"/>
+        <polygon points="50,4 8,62 50,62" fill="#ffd2f2"/>
+        <polygon points="50,4 92,62 50,62" fill="#ee9ae0"/>
+        <polygon points="50,62 92,62 50,146" fill="#a23fae"/>
+        <polygon points="50,4 92,62 50,146 8,62" fill="none" stroke="#2a0838" stroke-width="5" stroke-linejoin="round"/>
+      </svg>
+      <svg class="logo-crown" viewBox="0 0 60 34" aria-hidden="true">
+        <path d="M10 30 L6 10 L20 20 L30 4 L40 20 L54 10 L50 30 Z" fill="#ffd2f2" stroke="#2a0838" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+      <span class="logo-text"><span class="candy" data-text="Migas">Migas</span><span class="candy" data-text="Sims">Sims</span></span>
     </a>
     <span class="topbar-date">31 · 10</span>
   </header>
@@ -60,7 +76,6 @@
       </div>
 
       <div class="deck">
-        <span class="deco-ghost" aria-hidden="true"><img src="arte/fantasma-maos.svg" alt=""></span>
         <div class="fan" aria-hidden="true">
           <img src="img/verso-6.webp?v=3" alt="">
           <img src="img/verso-2.webp?v=3" alt="">
@@ -88,13 +103,17 @@
       </div>
 
       <div class="props" aria-hidden="true">
+        <svg class="ground" viewBox="0 0 1200 90" preserveAspectRatio="none">
+          <path d="M0 46 C120 24 230 30 340 40 S560 58 700 42 S960 22 1080 36 S1170 44 1200 40 V90 H0 Z" fill="#170622"/>
+          <path d="M0 46 C120 24 230 30 340 40 S560 58 700 42 S960 22 1080 36 S1170 44 1200 40" fill="none" stroke="rgba(255,211,242,.12)" stroke-width="2"/>
+        </svg>
         <div class="candles">
-          <img class="candle c1" src="img/vela-2.webp?v=3" alt="">
-          <img class="candle c2" src="img/vela-8.webp?v=3" alt="">
-          <img class="candle c3" src="img/vela-5.webp?v=3" alt="">
+          <img class="candle c1" src="img/vela-2.webp?v=4" alt="">
+          <img class="candle c2" src="img/vela-8.webp?v=4" alt="">
+          <img class="candle c3" src="img/vela-5.webp?v=4" alt="">
         </div>
-        <img class="cat" src="img/gato.webp?v=3" alt="">
-        <img class="pumpkin" src="img/abobora.webp?v=3" alt="">
+        <img class="cat" src="img/gato.webp?v=4" alt="">
+        <img class="pumpkin" src="img/abobora.webp?v=4" alt="">
       </div>
     </section>
 
